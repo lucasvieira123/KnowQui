@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">KnowQui</string>
+
+    <string-array name="tiposDeEscolaridades">
+        <item>Primeiro Ano</item>
+        <item>Segundo Ano</item>
+        <item>Terceiro Ano</item>
+    </string-array>
+
 </resources>

@@ -6,5 +6,5 @@ package Model;
 
 public class Historico {
     Integer id;
-    Integer
+
 }
