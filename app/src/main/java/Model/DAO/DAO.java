@@ -6,20 +6,20 @@ import java.util.List;
  * Created by lucas-vieira on 18/02/18.
  */
 
-public interface DAO<Entidy> {
+public interface DAO<entity> {
 
-    void add(Entidy e);
+    void add(entity e);
 
-    void remove(Entidy e);
+    void remove(entity e);
 
     void remove(Integer id);
 
-    List<Entidy> list();
+    List<entity> list();
 
-    List<Entidy> list(String whereClause);
+    List<entity> list(String whereClause);
 
-    Entidy get(Integer id);
+    entity get(Integer id);
 
-    Entidy getFirst(Integer id);
+    entity getFirst(Integer id);
 
 }
