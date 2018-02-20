@@ -1,5 +1,10 @@
 package Model.DAO;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import java.util.List;
 
 import Model.Historico;
@@ -8,7 +13,14 @@ import Model.Historico;
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class HistoricoDAO implements DAO<Historico> {
+public abstract class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
+
+    public static final String NAME_TABLE = Historico.class.getSimpleName();
+    private static final int VERSION = 1;
+
+    public HistoricoDAO(Context context) {
+        super(context, NAME_TABLE, null, VERSION);
+    }
 
     @Override
     public void add(Historico e) {
@@ -31,9 +43,10 @@ public class HistoricoDAO implements DAO<Historico> {
     }
 
     @Override
-    public List<Historico> list(String whereClause) {
+    public List<Historico> list(String selection, String selectionArgs) {
         return null;
     }
+
 
     @Override
     public Historico get(Integer id) {
@@ -44,4 +57,10 @@ public class HistoricoDAO implements DAO<Historico> {
     public Historico getFirst(Integer id) {
         return null;
     }
+
+    @Override
+    public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
+        return null;
+    }
+
 }

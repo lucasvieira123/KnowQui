@@ -8,7 +8,7 @@ public class Login {
 
     private String login;
     private String senha;
-   // private Usuario usuario;
+    private Integer id;
 
     public String getLogin() {
         return login;
@@ -26,11 +26,11 @@ public class Login {
         this.senha = senha;
     }
 
-//    public Usuario getUsuario() {
-//        return usuario;
-//    }
-//
-//    public void setUsuario(Usuario usuario) {
-//        this.usuario = usuario;
-//    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

@@ -7,8 +7,8 @@ package Model;
 public class Pergunta {
     private Integer id;
     private String descricao;
-    private Nivel nivel;
-    private Tipo tipo;
+    private Integer idNivel;
+    private Integer idTipo;
     private Integer idResposta;
 
     public Integer getId() {
@@ -27,20 +27,20 @@ public class Pergunta {
         this.descricao = descricao;
     }
 
-    public Nivel getNivel() {
-        return nivel;
+    public Integer getIdNivel() {
+        return idNivel;
     }
 
-    public void setNivel(Nivel nivel) {
-        this.nivel = nivel;
+    public void setIdNivel(Integer idNivel) {
+        this.idNivel = idNivel;
     }
 
-    public Tipo getTipo() {
-        return tipo;
+    public Integer getIdTipo() {
+        return idTipo;
     }
 
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
+    public void setIdTipo(Integer idTipo) {
+        this.idTipo = idTipo;
     }
 
     public Integer getIdResposta() {

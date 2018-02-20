@@ -5,16 +5,17 @@ package Model;
  */
 
 public class Usuario {
-    private Login login;
+    private Integer idLogin;
     private String nome;
     private Integer idade;
+    private Integer id;
 
-    public Login getLogin() {
-        return login;
+    public Integer getIdLogin() {
+        return idLogin;
     }
 
-    public void setLogin(Login login) {
-        this.login = login;
+    public void setIdLogin(Integer idLogin) {
+        this.idLogin = idLogin;
     }
 
     public String getNome() {
@@ -31,5 +32,13 @@ public class Usuario {
 
     public void setIdade(Integer idade) {
         this.idade = idade;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

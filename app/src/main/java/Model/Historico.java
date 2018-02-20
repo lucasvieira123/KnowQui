@@ -7,7 +7,7 @@ package Model;
 public class Historico {
     private Integer id;
     private String descricao;
-    private Usuario usuario;
+    private Integer idUsuario;
     private Boolean acertou;
     private String data;
 
@@ -27,12 +27,12 @@ public class Historico {
         this.descricao = descricao;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Boolean getAcertou() {
