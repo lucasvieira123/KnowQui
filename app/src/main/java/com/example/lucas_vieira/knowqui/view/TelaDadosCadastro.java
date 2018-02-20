@@ -14,6 +14,7 @@ public class TelaDadosCadastro extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_dados_cadastro);
+
         Spinner spinnerEscolaridade = findViewById(R.id.spinnerEscolaridadeId);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tiposDeEscolaridades,
