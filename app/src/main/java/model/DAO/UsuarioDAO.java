@@ -1,4 +1,4 @@
-package Model.DAO;
+package model.DAO;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import Model.Usuario;
+import model.Usuario;
 
 /**
  * Created by lucas-vieira on 15/02/18.

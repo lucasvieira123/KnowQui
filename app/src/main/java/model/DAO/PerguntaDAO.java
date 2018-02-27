@@ -1,4 +1,4 @@
-package Model.DAO;
+package model.DAO;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,18 +7,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import Model.Tipo;
+import model.Pergunta;
 
 /**
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
+public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
 
-    public static final String NAME_TABLE = Tipo.class.getSimpleName();
+    public static final String NAME_TABLE = Pergunta.class.getSimpleName();
     private static final int VERSION = 1;
 
-    public TipoDAO(Context context) {
+    public PerguntaDAO(Context context) {
         super(context, NAME_TABLE, null, VERSION);
     }
 
@@ -33,12 +33,12 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
     }
 
     @Override
-    public void add(Tipo e) {
+    public void add(Pergunta e) {
 
     }
 
     @Override
-    public void remove(Tipo e) {
+    public void remove(Pergunta e) {
 
     }
 
@@ -48,23 +48,23 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
     }
 
     @Override
-    public List<Tipo> list() {
+    public List<Pergunta> list() {
         return null;
     }
 
     @Override
-    public List<Tipo> list(String selection, String selectionArgs) {
+    public List<Pergunta> list(String selection, String selectionArgs) {
         return null;
     }
 
 
     @Override
-    public Tipo get(Integer id) {
+    public Pergunta get(Integer id) {
         return null;
     }
 
     @Override
-    public Tipo getFirst(Integer id) {
+    public Pergunta getFirst(Integer id) {
         return null;
     }
 

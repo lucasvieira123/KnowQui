@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -8,6 +8,7 @@ public class Login {
 
     private String login;
     private String senha;
+    //nao é boa pratica guardar senha no banco
     private Integer id;
 
     public String getLogin() {

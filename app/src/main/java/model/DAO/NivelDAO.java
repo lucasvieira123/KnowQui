@@ -1,4 +1,4 @@
-package Model.DAO;
+package model.DAO;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,18 +7,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import Model.Login;
+import model.Nivel;
 
 /**
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
+public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
 
-    public static final String NAME_TABLE = Login.class.getSimpleName();
+    public static final String NAME_TABLE = Nivel.class.getSimpleName();
     private static final int VERSION = 1;
 
-    public LoginDAO(Context context) {
+    public NivelDAO(Context context) {
         super(context, NAME_TABLE, null, VERSION);
     }
 
@@ -33,12 +33,12 @@ public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
     }
 
     @Override
-    public void add(Login e) {
+    public void add(Nivel e) {
 
     }
 
     @Override
-    public void remove(Login e) {
+    public void remove(Nivel e) {
 
     }
 
@@ -48,23 +48,23 @@ public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
     }
 
     @Override
-    public List<Login> list() {
+    public List<Nivel> list() {
         return null;
     }
 
     @Override
-    public List<Login> list(String selection, String selectionArgs) {
+    public List<Nivel> list(String selection, String selectionArgs) {
         return null;
     }
 
 
     @Override
-    public Login get(Integer id) {
+    public Nivel get(Integer id) {
         return null;
     }
 
     @Override
-    public Login getFirst(Integer id) {
+    public Nivel getFirst(Integer id) {
         return null;
     }
 

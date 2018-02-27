@@ -1,44 +1,33 @@
-package Model.DAO;
+package model.DAO;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import Model.Nivel;
+import model.Historico;
 
 /**
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
+public abstract class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
 
-    public static final String NAME_TABLE = Nivel.class.getSimpleName();
+    public static final String NAME_TABLE = Historico.class.getSimpleName();
     private static final int VERSION = 1;
 
-    public NivelDAO(Context context) {
+    public HistoricoDAO(Context context) {
         super(context, NAME_TABLE, null, VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void add(Historico e) {
 
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
-
-    @Override
-    public void add(Nivel e) {
-
-    }
-
-    @Override
-    public void remove(Nivel e) {
+    public void remove(Historico e) {
 
     }
 
@@ -48,23 +37,23 @@ public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
     }
 
     @Override
-    public List<Nivel> list() {
+    public List<Historico> list() {
         return null;
     }
 
     @Override
-    public List<Nivel> list(String selection, String selectionArgs) {
+    public List<Historico> list(String selection, String selectionArgs) {
         return null;
     }
 
 
     @Override
-    public Nivel get(Integer id) {
+    public Historico get(Integer id) {
         return null;
     }
 
     @Override
-    public Nivel getFirst(Integer id) {
+    public Historico getFirst(Integer id) {
         return null;
     }
 
@@ -72,6 +61,5 @@ public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
         return null;
     }
-
 
 }

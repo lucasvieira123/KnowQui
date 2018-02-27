@@ -1,4 +1,4 @@
-package Model.DAO;
+package model.DAO;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,18 +6,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
-import Model.Resposta;
+
+import model.Login;
 
 /**
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
+public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
 
-    public static final String NAME_TABLE = Resposta.class.getSimpleName();
+    public static final String NAME_TABLE = Login.class.getSimpleName();
     private static final int VERSION = 1;
 
-    public RespostaDAO(Context context) {
+    public LoginDAO(Context context) {
         super(context, NAME_TABLE, null, VERSION);
     }
 
@@ -32,12 +33,12 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
     }
 
     @Override
-    public void add(Resposta e) {
+    public void add(Login e) {
 
     }
 
     @Override
-    public void remove(Resposta e) {
+    public void remove(Login e) {
 
     }
 
@@ -47,23 +48,23 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
     }
 
     @Override
-    public List<Resposta> list() {
+    public List<Login> list() {
         return null;
     }
 
     @Override
-    public List<Resposta> list(String selection, String selectionArgs) {
+    public List<Login> list(String selection, String selectionArgs) {
         return null;
     }
 
 
     @Override
-    public Resposta get(Integer id) {
+    public Login get(Integer id) {
         return null;
     }
 
     @Override
-    public Resposta getFirst(Integer id) {
+    public Login getFirst(Integer id) {
         return null;
     }
 

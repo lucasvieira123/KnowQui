@@ -1,4 +1,4 @@
-package Model.DAO;
+package model.DAO;
 
 import android.database.Cursor;
 

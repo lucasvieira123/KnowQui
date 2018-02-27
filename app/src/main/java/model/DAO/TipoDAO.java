@@ -1,4 +1,4 @@
-package Model.DAO;
+package model.DAO;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,28 +7,38 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import Model.Historico;
+import model.Tipo;
 
 /**
  * Created by lucas-vieira on 15/02/18.
  */
 
-public abstract class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
+public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
 
-    public static final String NAME_TABLE = Historico.class.getSimpleName();
+    public static final String NAME_TABLE = Tipo.class.getSimpleName();
     private static final int VERSION = 1;
 
-    public HistoricoDAO(Context context) {
+    public TipoDAO(Context context) {
         super(context, NAME_TABLE, null, VERSION);
     }
 
     @Override
-    public void add(Historico e) {
+    public void onCreate(SQLiteDatabase db) {
 
     }
 
     @Override
-    public void remove(Historico e) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    @Override
+    public void add(Tipo e) {
+
+    }
+
+    @Override
+    public void remove(Tipo e) {
 
     }
 
@@ -38,23 +48,23 @@ public abstract class HistoricoDAO extends SQLiteOpenHelper implements DAO<Histo
     }
 
     @Override
-    public List<Historico> list() {
+    public List<Tipo> list() {
         return null;
     }
 
     @Override
-    public List<Historico> list(String selection, String selectionArgs) {
+    public List<Tipo> list(String selection, String selectionArgs) {
         return null;
     }
 
 
     @Override
-    public Historico get(Integer id) {
+    public Tipo get(Integer id) {
         return null;
     }
 
     @Override
-    public Historico getFirst(Integer id) {
+    public Tipo getFirst(Integer id) {
         return null;
     }
 
@@ -62,5 +72,6 @@ public abstract class HistoricoDAO extends SQLiteOpenHelper implements DAO<Histo
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
         return null;
     }
+
 
 }
