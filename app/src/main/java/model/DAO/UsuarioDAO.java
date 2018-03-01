@@ -14,20 +14,37 @@ import model.Usuario;
  */
 
 public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
+    public static final String NAME_DB = "KnowQui";
+    public static final String NAME_TABLE = Usuario.class.getSimpleName();
+    private static final int VERSION = 1;
+    private static UsuarioDAO instance = null;
+    private final SQLiteDatabase database;
 
 
+    private UsuarioDAO(Context context) {
+        super(context, NAME_DB, null, VERSION);
+        database = getWritableDatabase();
+        onCreate(database);
+    }
 
-        public static final String NAME_TABLE = Usuario.class.getSimpleName();
-        private static final int VERSION = 1;
-
-
-
-    public UsuarioDAO(Context context) {
-        super(context, NAME_TABLE, null, VERSION);
+    public static UsuarioDAO getInstance(Context context) {
+        if (instance == null) {
+            instance = new UsuarioDAO(context);
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE `Usuario` \n" +
+                "(\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                " `nome` TEXT NOT NULL,\n" +
+                " `idade` INTEGER NOT NULL,\n" +
+                " `Login_id` INTEGER NOT NULL \n" +
+                " )";
+
+        db.execSQL(CREATE_TABLE);
 
     }
 

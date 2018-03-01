@@ -13,16 +13,35 @@ import model.Resposta;
  */
 
 public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
-
+    public static final String NAME_DB = "KnowQui";
     public static final String NAME_TABLE = Resposta.class.getSimpleName();
     private static final int VERSION = 1;
+    private static RespostaDAO instance = null;
+    private final SQLiteDatabase database;
 
-    public RespostaDAO(Context context) {
-        super(context, NAME_TABLE, null, VERSION);
+
+    private RespostaDAO(Context context) {
+        super(context, NAME_DB, null, VERSION);
+        database = getWritableDatabase();
+        onCreate(database);
+    }
+
+    public static RespostaDAO getInstance(Context context) {
+        if(instance == null){
+            instance = new RespostaDAO(context);
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE `Resposta` " +
+                "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
+                " `descricao` TEXT NOT NULL," +
+                " `Pergunta_id` INTEGER NOT NULL," +
+                " `EhCorreta` INTEGER NOT NULL )";
+
+        db.execSQL(CREATE_TABLE);
 
     }
 

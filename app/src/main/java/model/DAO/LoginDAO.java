@@ -14,17 +14,35 @@ import model.Login;
  */
 
 public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
-
+    public static final String NAME_DB = "KnowQui";
     public static final String NAME_TABLE = Login.class.getSimpleName();
     private static final int VERSION = 1;
+    private static LoginDAO instance = null;
+    private final SQLiteDatabase database;
 
-    public LoginDAO(Context context) {
-        super(context, NAME_TABLE, null, VERSION);
+    private LoginDAO(Context context) {
+        super(context, NAME_DB, null, VERSION);
+        database = getWritableDatabase();
+        onCreate(database);
+    }
+
+    public static LoginDAO getInstance(Context context){
+        if(instance == null){
+            instance = new LoginDAO(context);
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE `Login` " +
+                "(" +
+                " `login` TEXT NOT NULL UNIQUE," +
+                " `senha` TEXT," +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE " +
+                ")";
 
+        db.execSQL(CREATE_TABLE);
     }
 
     @Override

@@ -14,17 +14,37 @@ import model.Pergunta;
  */
 
 public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
-
+    public static final String NAME_DB = "KnowQui";
     public static final String NAME_TABLE = Pergunta.class.getSimpleName();
     private static final int VERSION = 1;
+    private static PerguntaDAO instance = null;
+    private final SQLiteDatabase database;
 
-    public PerguntaDAO(Context context) {
-        super(context, NAME_TABLE, null, VERSION);
+    private PerguntaDAO(Context context) {
+        super(context, NAME_DB, null, VERSION);
+        database = getWritableDatabase();
+        onCreate(database);
+    }
+
+    public static PerguntaDAO getInstance(Context context) {
+
+        if(instance == null){
+            instance = new PerguntaDAO(context);
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE `Pergunta` " +
+                "( " +
+                "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
+                " `descricao` TEXT NOT NULL," +
+                " `Nivel_id` INTEGER NOT NULL," +
+                " `Tipo_id` INTEGER NOT NULL," +
+                " `Resposta_id` INTEGER NOT NULL )";
 
+        db.execSQL(CREATE_TABLE);
     }
 
     @Override

@@ -14,18 +14,35 @@ import model.Nivel;
  */
 
 public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
-
+    public static final String NAME_DB = "KnowQui";
     public static final String NAME_TABLE = Nivel.class.getSimpleName();
     private static final int VERSION = 1;
+    private static NivelDAO instance = null;
+    private final SQLiteDatabase database;
 
-    public NivelDAO(Context context) {
-        super(context, NAME_TABLE, null, VERSION);
+    private NivelDAO(Context context) {
+        super(context, NAME_DB, null, VERSION);
+        database = getWritableDatabase();
+        onCreate(database);
+    }
+
+    public static NivelDAO getInstance(Context context) {
+        if(instance == null){
+            instance = new NivelDAO(context);
+        }
+
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE `Nivel` " +
+                "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
+                " `descricao` TEXT NOT NULL )";
 
+        db.execSQL(CREATE_TABLE);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

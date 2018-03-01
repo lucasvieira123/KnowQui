@@ -14,17 +14,32 @@ import model.Tipo;
  */
 
 public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
-
+    public static final String NAME_DB = "KnowQui";
     public static final String NAME_TABLE = Tipo.class.getSimpleName();
     private static final int VERSION = 1;
+    private static TipoDAO instance = null;
+    private final SQLiteDatabase database;
 
-    public TipoDAO(Context context) {
-        super(context, NAME_TABLE, null, VERSION);
+    private TipoDAO(Context context) {
+        super(context, NAME_DB, null, VERSION);
+        database = getWritableDatabase();
+        onCreate(database);
+    }
+
+    public static TipoDAO getInstance(Context context) {
+        if(instance == null){
+            instance = new TipoDAO(context);
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE `Tipo` " +
+                "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
+                " `descricao` TEXT NOT NULL )";
 
+        db.execSQL(CREATE_TABLE);
     }
 
     @Override
