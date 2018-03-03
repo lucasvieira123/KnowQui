@@ -36,7 +36,7 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE `Pergunta` " +
+        String CREATE_TABLE = "CREATE TABLE  IF NOT EXISTS `Pergunta` " +
                 "( " +
                 "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL," +

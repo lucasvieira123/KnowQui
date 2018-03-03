@@ -35,7 +35,7 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE `Resposta` " +
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Resposta` " +
                 "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL," +
                 " `Pergunta_id` INTEGER NOT NULL," +

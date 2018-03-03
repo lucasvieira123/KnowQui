@@ -35,7 +35,7 @@ public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE `Login` " +
+        String CREATE_TABLE = "CREATE TABLE  IF NOT EXISTS `Login` " +
                 "(" +
                 " `login` TEXT NOT NULL UNIQUE," +
                 " `senha` TEXT," +

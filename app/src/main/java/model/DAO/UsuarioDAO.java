@@ -36,7 +36,7 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE `Usuario` \n" +
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Usuario` \n" +
                 "(\n" +
                 " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
                 " `nome` TEXT NOT NULL,\n" +

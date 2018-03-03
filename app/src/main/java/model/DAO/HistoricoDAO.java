@@ -38,7 +38,7 @@ public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.i("DB","onCreate historico");
-        String CREATE_TABLE = "CREATE TABLE `Historico` " +
+        String CREATE_TABLE = "CREATE TABLE  IF NOT EXISTS `Historico` " +
                 "(" +
                 " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT," +

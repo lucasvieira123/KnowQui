@@ -35,7 +35,7 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE `Tipo` " +
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Tipo` " +
                 "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL )";
 

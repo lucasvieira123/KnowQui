@@ -36,7 +36,7 @@ public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE `Nivel` " +
+        String CREATE_TABLE = "CREATE TABLE  IF NOT EXISTS `Nivel` " +
                 "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL )";
 
