@@ -7,7 +7,7 @@ package model;
 public class Resposta {
     private Integer id;
     private String descricao;
-    private Integer idPergunda;
+    private Integer Pergunta_id;
     private Boolean EhCorreta;
 
     public Integer getId() {
@@ -26,12 +26,12 @@ public class Resposta {
         this.descricao = descricao;
     }
 
-    public Integer getIdPergunda() {
-        return idPergunda;
+    public Integer getPergunta_id() {
+        return Pergunta_id;
     }
 
-    public void setIdPergunda(Integer idPergunda) {
-        this.idPergunda = idPergunda;
+    public void setPergunta_id(Integer pergunta_id) {
+        this.Pergunta_id = pergunta_id;
     }
 
     public Boolean getEhCorreta() {

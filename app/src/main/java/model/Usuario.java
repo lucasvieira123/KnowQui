@@ -5,17 +5,17 @@ package model;
  */
 
 public class Usuario {
-    private Integer idLogin;
+    private Integer Login_id;
     private String nome;
     private Integer idade;
     private Integer id;
 
-    public Integer getIdLogin() {
-        return idLogin;
+    public Integer getLogin_id() {
+        return Login_id;
     }
 
-    public void setIdLogin(Integer idLogin) {
-        this.idLogin = idLogin;
+    public void setLogin_id(Integer login_id) {
+        this.Login_id = login_id;
     }
 
     public String getNome() {
