@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
+
+import model.Historico;
 import model.Resposta;
+import utils.DataBaseQueryHelper;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -18,11 +21,13 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
     private static final int VERSION = 1;
     private static RespostaDAO instance = null;
     private final SQLiteDatabase database;
+    private DataBaseQueryHelper dataBaseQueryHelper;
 
 
     private RespostaDAO(Context context) {
         super(context, NAME_DB, null, VERSION);
         database = getWritableDatabase();
+        dataBaseQueryHelper = new DataBaseQueryHelper(Resposta.class);
         onCreate(database);
     }
 
@@ -52,7 +57,7 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
 
     @Override
     public void add(Resposta e) {
-
+        dataBaseQueryHelper = new DataBaseQueryHelper(Historico.class);
     }
 
     @Override

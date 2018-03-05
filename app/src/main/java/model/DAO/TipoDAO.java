@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import model.Historico;
 import model.Tipo;
+import utils.DataBaseQueryHelper;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -19,10 +21,12 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
     private static final int VERSION = 1;
     private static TipoDAO instance = null;
     private final SQLiteDatabase database;
+    private DataBaseQueryHelper dataBaseQueryHelper;
 
     private TipoDAO(Context context) {
         super(context, NAME_DB, null, VERSION);
         database = getWritableDatabase();
+        dataBaseQueryHelper = new DataBaseQueryHelper(Tipo.class);
         onCreate(database);
     }
 
@@ -49,7 +53,7 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
 
     @Override
     public void add(Tipo e) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
     @Override

@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import model.Historico;
 import model.Pergunta;
+import utils.DataBaseQueryHelper;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -19,10 +21,12 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
     private static final int VERSION = 1;
     private static PerguntaDAO instance = null;
     private final SQLiteDatabase database;
+    private DataBaseQueryHelper dataBaseQueryHelper;
 
     private PerguntaDAO(Context context) {
         super(context, NAME_DB, null, VERSION);
         database = getWritableDatabase();
+        dataBaseQueryHelper = new DataBaseQueryHelper(Pergunta.class);
         onCreate(database);
     }
 
@@ -54,7 +58,7 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
 
     @Override
     public void add(Pergunta e) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
     @Override

@@ -36,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         HistoricoDAO historicoDAO = HistoricoDAO.getInstance(context);
+        Historico historicoTeste = new Historico();
+        historicoTeste.setAcertou(true);
+        historicoTeste.setData("04/03/2018");
+        historicoTeste.setDescricao("descricaoHistorico");
+        historicoTeste.setUsuario_id(1);
+        historicoTeste.setId(15);
+        historicoDAO.add(historicoTeste);
 
         LoginDAO loginDAO = LoginDAO.getInstance(context);
 

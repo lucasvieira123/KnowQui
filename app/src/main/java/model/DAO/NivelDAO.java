@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import model.Historico;
 import model.Nivel;
+import utils.DataBaseQueryHelper;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -15,14 +17,15 @@ import model.Nivel;
 
 public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
     public static final String NAME_DB = "KnowQui";
-    public static final String NAME_TABLE = Nivel.class.getSimpleName();
     private static final int VERSION = 1;
     private static NivelDAO instance = null;
     private final SQLiteDatabase database;
+    private DataBaseQueryHelper dataBaseQueryHelper;
 
     private NivelDAO(Context context) {
         super(context, NAME_DB, null, VERSION);
         database = getWritableDatabase();
+        dataBaseQueryHelper = new DataBaseQueryHelper(Nivel.class);
         onCreate(database);
     }
 
@@ -51,7 +54,7 @@ public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
 
     @Override
     public void add(Nivel e) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
     @Override

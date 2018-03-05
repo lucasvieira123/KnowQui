@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import model.Historico;
 import model.Login;
+import utils.DataBaseQueryHelper;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -15,14 +17,15 @@ import model.Login;
 
 public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
     public static final String NAME_DB = "KnowQui";
-    public static final String NAME_TABLE = Login.class.getSimpleName();
     private static final int VERSION = 1;
     private static LoginDAO instance = null;
     private final SQLiteDatabase database;
+    private final DataBaseQueryHelper dataBaseQueryHelper;
 
     private LoginDAO(Context context) {
         super(context, NAME_DB, null, VERSION);
         database = getWritableDatabase();
+        dataBaseQueryHelper = new DataBaseQueryHelper(Login.class);
         onCreate(database);
     }
 
@@ -52,7 +55,7 @@ public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
 
     @Override
     public void add(Login e) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
     @Override

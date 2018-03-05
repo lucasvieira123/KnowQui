@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import model.Historico;
 import model.Usuario;
+import utils.DataBaseQueryHelper;
 
 /**
  * Created by lucas-vieira on 15/02/18.
@@ -19,11 +21,13 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
     private static final int VERSION = 1;
     private static UsuarioDAO instance = null;
     private final SQLiteDatabase database;
+    private DataBaseQueryHelper dataBaseQueryHelper;
 
 
     private UsuarioDAO(Context context) {
         super(context, NAME_DB, null, VERSION);
         database = getWritableDatabase();
+        dataBaseQueryHelper = new DataBaseQueryHelper(Usuario.class);
         onCreate(database);
     }
 
@@ -55,7 +59,7 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
 
     @Override
     public void add(Usuario e) {
-
+        dataBaseQueryHelper = new DataBaseQueryHelper(Historico.class);
     }
 
     @Override
