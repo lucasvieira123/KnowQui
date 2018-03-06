@@ -236,4 +236,42 @@ public class DataBaseQueryHelper {
         }
         return null;
     }
+
+    public String getStatementList(String selection, String[] selectionArgs) {
+        String selectionArgsPrepared = String.format(selection, selectionArgs);
+        String clauseWhere = " WHERE ".concat(selectionArgsPrepared);
+        String listStatement = "SELECT * FROM " + NAME_TABLE.concat(clauseWhere);
+        return listStatement;
+
+    }
+
+    public String getStatementElement(String selection, String[] selectionArgs) {
+        String selectionArgsPrepared = String.format(selection, selectionArgs);
+        String clauseWhere = " WHERE ".concat(selectionArgsPrepared);
+        String elementStatement = "SELECT * FROM " + NAME_TABLE.concat(clauseWhere);
+        return elementStatement;
+    }
+
+    public Object getElement(Cursor cursor) {
+        Object [] args = new Object[2];
+        String nameMethodWithSet;
+        String value;
+        while (cursor.moveToNext()) {
+            Object newObject = tryCreateNewInstance();
+            for (String collumn : cursor.getColumnNames()) {
+                value = cursor.getString(cursor.getColumnIndex(collumn));
+                args[0] = createMapsOfAttributesAndTypes().get(collumn);
+                args[1] = value;
+                nameMethodWithSet = createNameMethedWithSetFrom(collumn);
+                trySetValue(newObject, nameMethodWithSet, args);
+            }
+
+            return newObject;
+        }
+        return null;
+    }
+
+    public String getStatementFirst() {
+        return "SELECT * FROM "+NAME_TABLE+" ORDER BY id ASC LIMIT 1";
+    }
 }

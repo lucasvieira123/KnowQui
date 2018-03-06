@@ -86,19 +86,23 @@ public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
     }
 
     @Override
-    public List<Historico> list(String selection, String selectionArgs) {
-        return null;
+    public List<Historico> list(String selection, String... selectionArgs) {
+       Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(selection, selectionArgs),null);
+       return (List<Historico>) (List<?>) dataBaseQueryHelper.getList(cursor);
     }
 
 
     @Override
-    public Historico get(Integer id) {
-        return null;
+    public Historico get(String selection, String... selectionArgs){
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementElement(selection, selectionArgs),null);
+        return (Historico) dataBaseQueryHelper.getElement(cursor);
     }
 
     @Override
-    public Historico getFirst(Integer id) {
-        return null;
+    public Historico getFirst() {
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementFirst(),null);
+        return (Historico) dataBaseQueryHelper.getElement(cursor);
+
     }
 
     @Override

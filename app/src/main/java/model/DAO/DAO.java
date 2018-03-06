@@ -29,11 +29,11 @@ public interface DAO<entity> {
 
     List<entity> list();
 
-    List<entity> list(String selection, String selectionArgs);
+    List<entity> list( String selection, String... selectionArgs);
 
-    entity get(Integer id);
+    entity get(String selection, String... selectionArgs);
 
-    entity getFirst(Integer id);
+    entity getFirst();
 
     Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit);
 
