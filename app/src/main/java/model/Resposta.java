@@ -4,7 +4,7 @@ package model;
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class Resposta {
+public class Resposta extends Bean{
     private Integer id;
     private String descricao;
     private Integer Pergunta_id;

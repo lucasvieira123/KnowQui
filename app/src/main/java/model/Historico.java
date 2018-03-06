@@ -4,7 +4,7 @@ package model;
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class Historico {
+public class Historico extends Bean{
     private Integer id;
     private String descricao;
     private Integer Usuario_id;

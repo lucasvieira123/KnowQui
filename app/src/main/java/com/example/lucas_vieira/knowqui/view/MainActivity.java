@@ -34,15 +34,22 @@ public class MainActivity extends AppCompatActivity {
         //depois devo criar uma classe so para gerenciar isso
         // acredito que seja uma classe do tipo MyApplication extends Application
 
-
         HistoricoDAO historicoDAO = HistoricoDAO.getInstance(context);
-        Historico historicoTeste = new Historico();
-        historicoTeste.setAcertou(true);
-        historicoTeste.setData("04/03/2018");
-        historicoTeste.setDescricao("descricaoHistorico");
-        historicoTeste.setUsuario_id(1);
-        historicoTeste.setId(15);
-        historicoDAO.add(historicoTeste);
+//
+//        for(int i = 0 ;i <5 ; i++){
+//            Historico historicoTeste = new Historico();
+//            historicoTeste.setAcertou(true);
+//            historicoTeste.setData("04/03/2018");
+//            historicoTeste.setDescricao("descricaoHistorico");
+//            historicoTeste.setUsuario_id(1);
+//            historicoDAO.add(historicoTeste);
+//
+//        }
+
+        historicoDAO.list();
+
+
+
 
         LoginDAO loginDAO = LoginDAO.getInstance(context);
 

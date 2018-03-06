@@ -4,7 +4,7 @@ package model;
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class Usuario {
+public class Usuario extends Bean{
     private Integer Login_id;
     private String nome;
     private Integer idade;

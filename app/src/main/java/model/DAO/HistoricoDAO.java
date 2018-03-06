@@ -18,6 +18,7 @@ import utils.DataBaseQueryHelper;
 
 public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
     public static final String NAME_DB = "KnowQui";
+    public static final String NAME_TABLE = Historico.class.getSimpleName();
     private static final int VERSION = 1;
     private static HistoricoDAO instance = null;
     private final SQLiteDatabase database;
@@ -42,7 +43,7 @@ public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.i("DB", "onCreate historico");
-        String CREATE_TABLE = "CREATE TABLE  IF NOT EXISTS `Historico` " +
+        String CREATE_TABLE_STATEMENT = "CREATE TABLE  IF NOT EXISTS `Historico` " +
                 "(" +
                 " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT," +
@@ -50,7 +51,7 @@ public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
                 " `acertou` INTEGER NOT NULL," +
                 " `data` TEXT NOT NULL " +
                 ")";
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_TABLE_STATEMENT);
     }
 
 
@@ -65,20 +66,23 @@ public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
         database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
-
     @Override
     public void remove(Historico e) {
+        database.execSQL(dataBaseQueryHelper.getStatementDelete(e));
 
     }
 
     @Override
     public void remove(Integer id) {
 
+        database.execSQL(dataBaseQueryHelper.getStatementDelete(id));
     }
 
     @Override
     public List<Historico> list() {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(),null);
+        return (List<Historico>) (List<?>) dataBaseQueryHelper.getList(cursor);
+
     }
 
     @Override

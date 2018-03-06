@@ -4,7 +4,7 @@ package model;
  * Created by lucas-vieira on 15/02/18.
  */
 
-public class Login {
+public class Login extends Bean{
 
     private String login;
     private String senha;
