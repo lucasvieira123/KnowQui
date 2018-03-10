@@ -20,7 +20,7 @@ public class LayoutSplash extends Activity {
             public void run() {
                 mostrarTelaInicial();
             }
-        },20000)
+        },20000);
         }
 
         private void mostrarTelaInicial(){
