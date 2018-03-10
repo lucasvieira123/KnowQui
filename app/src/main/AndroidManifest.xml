@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".TelaDadosCadastro"></activity> -->
-        <activity android:name=".LayoutTelaInicial"></activity>
+        <activity android:name=".LayoutTelaInicial" />
+        <activity android:name=".LayoutSplash"></activity>
     </application>
 
 </manifest>

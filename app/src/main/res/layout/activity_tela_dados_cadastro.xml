@@ -150,7 +150,29 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20sp">
 
+        <ImageButton
+            android:id="@+id/botaoSexoFemininoId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:background="@android:color/background_light"
+            app:srcCompat="@drawable/iconeFeminino" />
+
+        <ImageButton
+            android:id="@+id/botaoSexoMasculinoId"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:background="@android:color/background_light"
+            app:srcCompat="@drawable/iconeMasculino" />
 
     </LinearLayout>
+
+
+</LinearLayout>
 
