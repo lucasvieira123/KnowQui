@@ -1,5 +1,6 @@
 package com.example.lucas_vieira.knowqui.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
