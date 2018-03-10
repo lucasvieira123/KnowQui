@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:background="@android:color/background_light"
-            app:srcCompat="@drawable/iconeFeminino" />
+            app:srcCompat="@drawable/icone_feminino" />
 
         <ImageButton
             android:id="@+id/botaoSexoMasculinoId"
@@ -169,7 +169,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
             android:background="@android:color/background_light"
-            app:srcCompat="@drawable/iconeMasculino" />
+            app:srcCompat="@drawable/icone_masculino" />
 
     </LinearLayout>
 

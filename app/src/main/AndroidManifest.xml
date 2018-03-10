@@ -17,8 +17,19 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".TelaDadosCadastro"></activity> -->
-        <activity android:name=".LayoutTelaInicial" />
-        <activity android:name=".LayoutSplash"></activity>
+        <activity android:name=".view.LayoutTelaInicial" />
+
+        <activity
+            android:name=".view.LayoutSplash"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

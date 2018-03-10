@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/CorBackgroundPadrao"
     android:orientation="vertical"
-    tools:context="com.example.lucas_vieira.knowqui.LayoutTelaInicial">
+    tools:context="com.example.lucas_vieira.knowqui.view.LayoutTelaInicial">
 
 
     <LinearLayout
