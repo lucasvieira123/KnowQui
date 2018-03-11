@@ -72,20 +72,21 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
     }
 
     @Override
-    public List<Tipo> list(String selection, String selectionArgs) {
-        return null;
-    }
-
-
-    @Override
-    public Tipo get(Integer id) {
+    public List<Tipo> list(String selection, String... selectionArgs) {
         return null;
     }
 
     @Override
-    public Tipo getFirst(Integer id) {
+    public Tipo get(String selection, String... selectionArgs) {
         return null;
     }
+
+    @Override
+    public Tipo getFirst() {
+        return null;
+    }
+
+
 
     @Override
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {

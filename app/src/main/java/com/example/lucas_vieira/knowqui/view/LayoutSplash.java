@@ -20,14 +20,15 @@ public class LayoutSplash extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 mostrarTelaInicial();
             }
-        },20000);
+        },3000);
         }
 
         private void mostrarTelaInicial(){
 
-            Intent intent = new Intent(LayoutSplash.this,LayoutTelaInicial.class);
+            Intent intent = new Intent(LayoutSplash.this,TelaDadosCadastro.class);
             startActivity(intent);
             finish();
 

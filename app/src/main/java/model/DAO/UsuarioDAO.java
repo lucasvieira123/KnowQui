@@ -78,20 +78,21 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
     }
 
     @Override
-    public List<Usuario> list(String selection, String selectionArgs) {
-        return null;
-    }
-
-
-    @Override
-    public Usuario get(Integer id) {
+    public List<Usuario> list(String selection, String... selectionArgs) {
         return null;
     }
 
     @Override
-    public Usuario getFirst(Integer id) {
+    public Usuario get(String selection, String... selectionArgs) {
         return null;
     }
+
+    @Override
+    public Usuario getFirst() {
+        return null;
+    }
+
+
 
     @Override
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {

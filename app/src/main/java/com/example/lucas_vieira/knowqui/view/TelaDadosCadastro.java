@@ -5,11 +5,23 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.example.lucas_vieira.knowqui.R;
 
 public class TelaDadosCadastro extends AppCompatActivity {
+
+    private EditText editTextNome;
+    private EditText editTextIdade;
+
+    private CheckBox checkBoxPublico;
+    private CheckBox checkBoxPrivado;
+
+    private ImageButton imageButtonSexoFeminino;
+    private ImageButton imageButtonSexoMasculino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

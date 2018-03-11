@@ -73,18 +73,17 @@ public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
     }
 
     @Override
-    public List<Nivel> list(String selection, String selectionArgs) {
-        return null;
-    }
-
-
-    @Override
-    public Nivel get(Integer id) {
+    public List<Nivel> list(String selection, String... selectionArgs) {
         return null;
     }
 
     @Override
-    public Nivel getFirst(Integer id) {
+    public Nivel get(String selection, String... selectionArgs) {
+        return null;
+    }
+
+    @Override
+    public Nivel getFirst() {
         return null;
     }
 

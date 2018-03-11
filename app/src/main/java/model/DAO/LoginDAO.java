@@ -74,20 +74,21 @@ public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
     }
 
     @Override
-    public List<Login> list(String selection, String selectionArgs) {
-        return null;
-    }
-
-
-    @Override
-    public Login get(Integer id) {
+    public List<Login> list(String selection, String... selectionArgs) {
         return null;
     }
 
     @Override
-    public Login getFirst(Integer id) {
+    public Login get(String selection, String... selectionArgs) {
         return null;
     }
+
+    @Override
+    public Login getFirst() {
+        return null;
+    }
+
+
 
     @Override
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
