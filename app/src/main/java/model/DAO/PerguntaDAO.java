@@ -91,6 +91,8 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
         return null;
     }
 
+
+
     @Override
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
         return null;

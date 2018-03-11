@@ -90,6 +90,8 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
         return null;
     }
 
+
+
     @Override
     public Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
         return null;

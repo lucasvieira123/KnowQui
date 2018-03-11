@@ -17,8 +17,7 @@ import model.DAO.PerguntaDAO;
 import model.DAO.RespostaDAO;
 import model.DAO.TipoDAO;
 import model.DAO.UsuarioDAO;
-import model.Historico;
-import model.Nivel;
+
 
 public class MainActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
@@ -31,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
         startUpMethod(getBaseContext());
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        PerguntaFragment perguntaFragment = new PerguntaFragment();
-
-        fragmentTransaction.replace(R.id.layout_main,perguntaFragment,perguntaFragment.getClass().getSimpleName());
-        fragmentTransaction.commit();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        PerguntaFragment perguntaFragment = new PerguntaFragment();
+//
+//        fragmentTransaction.replace(R.id.layout_main,perguntaFragment,perguntaFragment.getClass().getSimpleName());
+//        fragmentTransaction.commit();
 
     }
 
