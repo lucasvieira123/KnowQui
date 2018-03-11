@@ -77,18 +77,17 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
     }
 
     @Override
-    public List<Pergunta> list(String selection, String selectionArgs) {
-        return null;
-    }
-
-
-    @Override
-    public Pergunta get(Integer id) {
+    public List<Pergunta> list(String selection, String... selectionArgs) {
         return null;
     }
 
     @Override
-    public Pergunta getFirst(Integer id) {
+    public Pergunta get(String selection, String... selectionArgs) {
+        return null;
+    }
+
+    @Override
+    public Pergunta getFirst() {
         return null;
     }
 

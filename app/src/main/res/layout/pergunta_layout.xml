@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-
+    android:fillViewport="true"
+    android:orientation="vertical">
 
 
     <android.support.constraint.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/texto_tipo"
@@ -31,70 +29,74 @@
 
         <TextView
             android:id="@+id/texto_princial"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="16dp"
             android:text="TEXTO-PRINCIPAL-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/texto_tipo" />
 
         <ImageView
             android:id="@+id/imagem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/ic_launcher_background"
-            app:layout_constraintBottom_toTopOf="@+id/texto_secundario"
+            android:background="@drawable/place_holder"
+            android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.337"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/texto_princial" />
 
         <TextView
             android:id="@+id/texto_secundario"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
+            android:layout_marginTop="8dp"
             android:text="-TEXTO-SECUNDARIO-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="248dp" />
+            app:layout_constraintTop_toBottomOf="@+id/imagem" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/pular_imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/icone-pular"
+            android:background="@drawable/icone_pular"
+            android:clickable="true"
+            android:focusable="true"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/progressBar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_d"
-            app:srcCompat="@android:drawable/btn_dialog" />
+            app:layout_constraintTop_toBottomOf="@+id/item_d" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/validar_imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/icone_validar"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/progressBar"
-            app:layout_constraintTop_toBottomOf="@+id/item_d"
-            app:srcCompat="@android:drawable/btn_star_big_off" />
+            app:layout_constraintTop_toBottomOf="@+id/item_d" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -108,63 +110,76 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_c" />
+            app:layout_constraintTop_toBottomOf="@+id/item_d" />
 
         <TextView
             android:id="@+id/item_b"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
-            android:text="item b"
+            android:clickable="true"
+            android:focusable="true"
+            android:enabled="true"
+            android:text="-TEXTO-ITEM-B-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_a" />
-
+            app:layout_constraintTop_toBottomOf="@+id/item_a"
+            android:background="@drawable/selector_itens_pergunta"/>
 
         <TextView
             android:id="@+id/item_a"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
-            android:text="item a"
+            android:clickable="true"
+            android:focusable="true"
+            android:enabled="true"
+            android:text="-TEXTO-ITEM-A-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/texto_secundario" />
+            app:layout_constraintTop_toBottomOf="@+id/texto_secundario"
+            android:background="@drawable/selector_itens_pergunta"/>
 
 
         <TextView
             android:id="@+id/item_d"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="8dp"
-            android:text="item d"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_c"
-            app:layout_constraintVertical_bias="0.00999999" />
-
-        <TextView
-            android:id="@+id/item_c"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
-            android:text="item c"
+            android:clickable="true"
+            android:focusable="true"
+            android:enabled="true"
+            android:text="-TEXTO-ITEM-D-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_b" />
+            app:layout_constraintTop_toBottomOf="@+id/item_c"
+            android:background="@drawable/selector_itens_pergunta"/>
+
+        <TextView
+            android:id="@+id/item_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:enabled="true"
+            android:text="-TEXTO-ITEM-C-HOLDER"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_b"
+            android:background="@drawable/selector_itens_pergunta"/>
 
 
     </android.support.constraint.ConstraintLayout>

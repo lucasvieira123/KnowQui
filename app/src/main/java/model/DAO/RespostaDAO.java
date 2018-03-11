@@ -76,18 +76,17 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
     }
 
     @Override
-    public List<Resposta> list(String selection, String selectionArgs) {
-        return null;
-    }
-
-
-    @Override
-    public Resposta get(Integer id) {
+    public List<Resposta> list(String selection, String... selectionArgs) {
         return null;
     }
 
     @Override
-    public Resposta getFirst(Integer id) {
+    public Resposta get(String selection, String... selectionArgs) {
+        return null;
+    }
+
+    @Override
+    public Resposta getFirst() {
         return null;
     }
 

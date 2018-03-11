@@ -1,5 +1,7 @@
 package com.example.lucas_vieira.knowqui.view;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +30,18 @@ public class MainActivity extends AppCompatActivity {
         Stetho.initializeWithDefaults(this);
         startUpMethod(getBaseContext());
         setContentView(R.layout.activity_main);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        PerguntaFragment perguntaFragment = new PerguntaFragment();
+
+        fragmentTransaction.replace(R.id.layout_main,perguntaFragment,perguntaFragment.getClass().getSimpleName());
+        fragmentTransaction.commit();
+
     }
+
+
 
     private static void startUpMethod(Context context) {
         //depois devo criar uma classe so para gerenciar isso
