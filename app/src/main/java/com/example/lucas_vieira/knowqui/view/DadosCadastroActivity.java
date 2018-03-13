@@ -59,13 +59,12 @@ public class DadosCadastroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //todo JP FAZER
                 boolean campoNomeValidado = validarCampoNome();
-                boolean campoIdadeValidade = validarCampoIdade();
+                boolean campoIdadeValidada = validarCampoIdade();
 
-                if(campoNomeValidado == true){
-                    chamarTelaInicial();
-                }else if(campoIdadeValidade == true){
+                if(campoNomeValidado == true && campoIdadeValidada == true){
                     chamarTelaInicial();
                 }
+
 
 
             }
@@ -77,7 +76,6 @@ public class DadosCadastroActivity extends AppCompatActivity {
         if(editTextIdade.getText().toString().equals("")){
 
             Toast.makeText(getApplication(),"Campo Idade Vazio", Toast.LENGTH_SHORT).show();
-            editTextIdade.requestFocus();
             return false;
         }return  true;
 
@@ -86,7 +84,6 @@ public class DadosCadastroActivity extends AppCompatActivity {
     private boolean validarCampoNome() {
         if(editTextNome.getText().toString().equals("")){
             Toast.makeText(getApplication(),"Campo Nome Vazio", Toast.LENGTH_SHORT).show();
-            editTextNome.requestFocus();
             return false;
         }return true;
     }
