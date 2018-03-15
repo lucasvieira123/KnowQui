@@ -50,6 +50,31 @@ public class DadosCadastroActivity extends AppCompatActivity {
         checkBoxPrivado = findViewById(R.id.checkBoxPrivadoId);
         checkBoxPublico = findViewById(R.id.checkBoxPublicoId);
 
+        checkBoxPrivado.setOnClickListener(onCheckedChangeListnerPrivado());
+        checkBoxPublico.setOnClickListener(onCheckedChangeListnerPublico());
+    }
+
+    private View.OnClickListener onCheckedChangeListnerPublico() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+            }
+        };
+    }
+
+    private View.OnClickListener onCheckedChangeListnerPrivado() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        };
+
+
     }
 
 
@@ -60,15 +85,24 @@ public class DadosCadastroActivity extends AppCompatActivity {
                 //todo JP FAZER
                 boolean campoNomeValidado = validarCampoNome();
                 boolean campoIdadeValidada = validarCampoIdade();
+                boolean checkBoxPrivadoValidado = validarCheckBoxPrivado();
+                boolean checkBoxPublicoValidado = validarCheckBoxPublico();
 
-                if(campoNomeValidado == true && campoIdadeValidada == true){
-                    chamarTelaInicial();
-                }
+                validarCampoIdade();
+                validarCampoNome();
 
-
+                validarCheckBoxPublico();
+                validarCheckBoxPrivado();
 
             }
         };
+    }
+
+
+    private void chamarTelaInicial() {
+        Intent intent = new Intent(this, TelaInicialActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private boolean validarCampoIdade() {
@@ -77,7 +111,12 @@ public class DadosCadastroActivity extends AppCompatActivity {
 
             Toast.makeText(getApplication(),"Campo Idade Vazio", Toast.LENGTH_SHORT).show();
             return false;
-        }return  true;
+        }else {
+
+            chamarTelaInicial();
+            return true;
+
+        }
 
     }
 
@@ -85,15 +124,41 @@ public class DadosCadastroActivity extends AppCompatActivity {
         if(editTextNome.getText().toString().equals("")){
             Toast.makeText(getApplication(),"Campo Nome Vazio", Toast.LENGTH_SHORT).show();
             return false;
-        }return true;
+        }else {
+
+            chamarTelaInicial();
+            return true;
+
+        }
     }
 
-    private void chamarTelaInicial() {
-        Intent intent = new Intent(this, TelaInicialActivity.class);
-        startActivity(intent);
-        finish();
+    private boolean validarCheckBoxPrivado() {
+
+        if(checkBoxPrivado.isChecked()){
+
+            chamarTelaInicial();
+            return true;
+
+        }else {
+
+            Toast.makeText(getApplication(),"Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
+            return false;
+
+        }
+
     }
 
+    private boolean validarCheckBoxPublico() {
+        if(checkBoxPublico.isChecked()){
 
+            chamarTelaInicial();
+            return true;
+
+        }else {
+
+            Toast.makeText(getApplication(),"Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
 }
