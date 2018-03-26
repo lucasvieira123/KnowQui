@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     android:orientation="vertical"
-    tools:context="com.example.lucas_vieira.knowqui.view.DadosCadastroActivity">
+    tools:context="com.example.lucas_vieira.knowqui.view.DadosCadastroFragment">
 
     <TextView
         android:id="@+id/textoDadosCadastraisId"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tela_inicial_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/CorBackgroundPadrao"
@@ -17,10 +18,13 @@
             android:id="@+id/textoIniciarId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:text="Iniciar Jogo"
             android:textColor="@android:color/background_light"
             android:textSize="40dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+             />
 
     </LinearLayout>
 

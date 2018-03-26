@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 
 import com.example.lucas_vieira.knowqui.R;
 
-public class DadosCadastroActivity extends AppCompatActivity {
+public class DadosCadastroFragment extends AppCompatActivity {
 
     private EditText editTextNome;
     private EditText editTextIdade;
