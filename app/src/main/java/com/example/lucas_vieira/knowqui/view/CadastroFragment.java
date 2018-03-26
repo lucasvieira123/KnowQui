@@ -1,10 +1,15 @@
 package com.example.lucas_vieira.knowqui.view;
 
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.lucas_vieira.knowqui.R;
 
-public class DadosCadastroFragment extends AppCompatActivity {
+public class CadastroFragment extends Fragment {
 
     private EditText editTextNome;
     private EditText editTextIdade;
@@ -25,32 +30,38 @@ public class DadosCadastroFragment extends AppCompatActivity {
 
     private ImageView imageButtonSexoFeminino;
     private ImageView imageButtonSexoMasculino;
+    private Spinner spinnerEscolaridade;
 
     private Button botaoSalvar;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tela_dados_cadastro);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+       View layout = inflater.inflate(R.layout.cadastro_fragment,container,false);
 
-        Spinner spinnerEscolaridade = findViewById(R.id.spinnerEscolaridadeId);
+        spinnerEscolaridade = layout.findViewById(R.id.spinnerEscolaridadeId);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tiposDeEscolaridades,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getBaseContext()
+                , R.array.tiposDeEscolaridades,
                 android.R.layout.simple_spinner_item);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEscolaridade.setAdapter(adapter);
 
-        botaoSalvar = findViewById(R.id.botaoSalvar);
+        botaoSalvar = layout.findViewById(R.id.botaoSalvar);
         botaoSalvar.setOnClickListener(onClickListenerSalvar());
 
-        editTextNome = findViewById(R.id.editTextNomeId);
-        editTextIdade = findViewById(R.id.editTextIdadeId);
+        editTextNome = layout.findViewById(R.id.editTextNomeId);
+        editTextIdade = layout.findViewById(R.id.editTextIdadeId);
 
-        checkBoxPrivado = findViewById(R.id.checkBoxPrivadoId);
-        checkBoxPublico = findViewById(R.id.checkBoxPublicoId);
+        checkBoxPrivado = layout.findViewById(R.id.checkBoxPrivadoId);
+        checkBoxPublico = layout.findViewById(R.id.checkBoxPublicoId);
 
         checkBoxPrivado.setOnClickListener(onCheckedChangeListnerPrivado());
         checkBoxPublico.setOnClickListener(onCheckedChangeListnerPublico());
+
+        return layout;
     }
 
     private View.OnClickListener onCheckedChangeListnerPublico() {
@@ -98,21 +109,29 @@ public class DadosCadastroFragment extends AppCompatActivity {
     }
 
 
-    private void chamarTelaInicial() {
-        Intent intent = new Intent(this, TelaInicialActivity.class);
-        startActivity(intent);
-        finish();
+    private void chamarMenuFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        MenuFragment menuFragment = new MenuFragment();
+
+        fragmentTransaction.replace(R.id.layout_main,
+                menuFragment,
+                menuFragment.getClass().getSimpleName());
+
+        fragmentTransaction.commit();
+
     }
 
     private boolean validarCampoIdade() {
 
         if(editTextIdade.getText().toString().equals("")){
 
-            Toast.makeText(getApplication(),"Campo Idade Vazio", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getBaseContext(),"Campo Idade Vazio", Toast.LENGTH_SHORT).show();
             return false;
         }else {
 
-            chamarTelaInicial();
+            chamarMenuFragment();
             return true;
 
         }
@@ -121,11 +140,11 @@ public class DadosCadastroFragment extends AppCompatActivity {
 
     private boolean validarCampoNome() {
         if(editTextNome.getText().toString().equals("")){
-            Toast.makeText(getApplication(),"Campo Nome Vazio", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getBaseContext(),"Campo Nome Vazio", Toast.LENGTH_SHORT).show();
             return false;
         }else {
 
-            chamarTelaInicial();
+            chamarMenuFragment();
             return true;
 
         }
@@ -135,12 +154,12 @@ public class DadosCadastroFragment extends AppCompatActivity {
 
         if(checkBoxPrivado.isChecked()){
 
-            chamarTelaInicial();
+            chamarMenuFragment();
             return true;
 
         }else {
 
-            Toast.makeText(getApplication(),"Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getBaseContext(),"Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
             return false;
 
         }
@@ -150,12 +169,12 @@ public class DadosCadastroFragment extends AppCompatActivity {
     private boolean validarCheckBoxPublico() {
         if(checkBoxPublico.isChecked()){
 
-            chamarTelaInicial();
+            chamarMenuFragment();
             return true;
 
         }else {
 
-            Toast.makeText(getApplication(),"Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getBaseContext(),"Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

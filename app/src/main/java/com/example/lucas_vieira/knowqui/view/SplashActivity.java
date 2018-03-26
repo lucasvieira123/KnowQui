@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void mostrarTelaInicial(){
 
-            Intent intent = new Intent(this, DadosCadastroActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
 

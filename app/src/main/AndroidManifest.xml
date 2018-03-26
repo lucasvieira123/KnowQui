@@ -19,8 +19,7 @@
             </intent-filter>
         </activity>
         <!-- <activity android:namDadosCadastroActivitystro"></activity> -->
-        <activity android:name=".view.TelaInicialActivity" />
-        <activity android:name=".view.DadosCadastroActivity"></activity>
+        <activity android:name=".view.MainActivity"></activity>
     </application>
 
 </manifest>
