@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by lucas-vieira on 15/02/18.
  */
@@ -7,8 +9,10 @@ package model;
 public class Resposta extends Bean{
     private Integer id;
     private String descricao;
-    private Integer Pergunta_id;
-    private Boolean EhCorreta;
+    private Integer id_pergunta;
+    private Integer EhCorreta;
+    @SerializedName("_index")
+    private String letra;
 
     public Integer getId() {
         return id;
@@ -26,19 +30,27 @@ public class Resposta extends Bean{
         this.descricao = descricao;
     }
 
-    public Integer getPergunta_id() {
-        return Pergunta_id;
+    public Integer getId_pergunta() {
+        return id_pergunta;
     }
 
-    public void setPergunta_id(Integer pergunta_id) {
-        this.Pergunta_id = pergunta_id;
+    public void setId_pergunta(Integer id_pergunta) {
+        this.id_pergunta = id_pergunta;
     }
 
-    public Boolean getEhCorreta() {
+    public Integer getEhCorreta() {
         return EhCorreta;
     }
 
-    public void setEhCorreta(Boolean ehCorreta) {
+    public void setEhCorreta(Integer ehCorreta) {
         EhCorreta = ehCorreta;
+    }
+
+    public String getLetra() {
+        return letra;
+    }
+
+    public void setLetraResposta(String letra) {
+        this.letra = letra;
     }
 }

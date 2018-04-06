@@ -68,6 +68,11 @@ public class NivelDAO extends SQLiteOpenHelper implements DAO<Nivel> {
     }
 
     @Override
+    public void removeAll() {
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
+    }
+
+    @Override
     public List<Nivel> list() {
         return null;
     }

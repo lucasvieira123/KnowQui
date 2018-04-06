@@ -73,6 +73,11 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
     }
 
     @Override
+    public void removeAll() {
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
+    }
+
+    @Override
     public List<Usuario> list() {
         return null;
     }

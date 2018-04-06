@@ -53,7 +53,9 @@ public class CadastroFragment extends Fragment {
         botaoSalvar.setOnClickListener(onClickListenerSalvar());
 
         editTextNome = layout.findViewById(R.id.editTextNomeId);
+        editTextNome.setText("bla");
         editTextIdade = layout.findViewById(R.id.editTextIdadeId);
+        editTextIdade.setText("bla");
 
         checkBoxPrivado = layout.findViewById(R.id.checkBoxPrivadoId);
         checkBoxPublico = layout.findViewById(R.id.checkBoxPublicoId);

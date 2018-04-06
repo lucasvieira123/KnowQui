@@ -1,5 +1,12 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 /**
  * Created by lucas-vieira on 15/02/18.
  */
@@ -7,9 +14,18 @@ package model;
 public class Pergunta extends Bean{
     private Integer id;
     private String descricao;
-    private Integer Nivel_id;
-    private Integer Tipo_id;
-    private Integer Resposta_id;
+    private Integer tempo;
+    @SerializedName("img")
+    @Expose
+    private String imagem;
+    @Expose
+    @SerializedName("diretorioImg")
+    private String diretorioImagem;
+    private String tipo;
+    private String nivel;
+    private String complemento;
+   // private List<Resposta> _respostas;
+
 
     public Integer getId() {
         return id;
@@ -27,27 +43,59 @@ public class Pergunta extends Bean{
         this.descricao = descricao;
     }
 
-    public Integer getNivel_id() {
-        return Nivel_id;
+    public Integer getTempo() {
+        return tempo;
     }
 
-    public void setNivel_id(Integer nivel_id) {
-        this.Nivel_id = nivel_id;
+    public void setTempo(Integer tempo) {
+        this.tempo = tempo;
     }
 
-    public Integer getTipo_id() {
-        return Tipo_id;
+    public String getImagem() {
+        return imagem;
     }
 
-    public void setTipo_id(Integer tipo_id) {
-        this.Tipo_id = tipo_id;
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
-    public Integer getResposta_id() {
-        return Resposta_id;
+    public String getDiretorioImagem() {
+        return diretorioImagem;
     }
 
-    public void setResposta_id(Integer resposta_id) {
-        this.Resposta_id = resposta_id;
+    public void setDiretorioImagem(String diretorioImagem) {
+        this.diretorioImagem = diretorioImagem;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+//    public List<Resposta> get_respostas() {
+//        return _respostas;
+//    }
+//
+//    public void set_respostas(List<Resposta> _respostas) {
+//        this._respostas = _respostas;
+//    }
 }

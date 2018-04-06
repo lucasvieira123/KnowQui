@@ -69,6 +69,11 @@ public class LoginDAO extends SQLiteOpenHelper implements DAO<Login> {
     }
 
     @Override
+    public void removeAll() {
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
+    }
+
+    @Override
     public List<Login> list() {
         return null;
     }

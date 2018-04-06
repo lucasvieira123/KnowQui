@@ -79,6 +79,11 @@ public class HistoricoDAO extends SQLiteOpenHelper implements DAO<Historico> {
     }
 
     @Override
+    public void removeAll() {
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
+    }
+
+    @Override
     public List<Historico> list() {
         Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(),null);
         return (List<Historico>) (List<?>) dataBaseQueryHelper.getList(cursor);

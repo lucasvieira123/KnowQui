@@ -44,9 +44,12 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
                 "( " +
                 "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL," +
-                " `Nivel_id` INTEGER NOT NULL," +
-                " `Tipo_id` INTEGER NOT NULL," +
-                " `Resposta_id` INTEGER NOT NULL )";
+                " `complemento` TEXT NOT NULL," +
+                " `imagem` TEXT NOT NULL," +
+                " `diretorioImagem` TEXT NOT NULL," +
+                " `nivel` TEXT NOT NULL," +
+                " `tipo` TEXT NOT NULL," +
+                "'tempo' INTEGER NOT NULL)";
 
         db.execSQL(CREATE_TABLE);
     }
@@ -63,32 +66,41 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
 
     @Override
     public void remove(Pergunta e) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementDelete(e));
     }
 
     @Override
     public void remove(Integer id) {
+        database.execSQL(dataBaseQueryHelper.getStatementDelete(id));
+    }
 
+    @Override
+    public void removeAll() {
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
     }
 
     @Override
     public List<Pergunta> list() {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(),null);
+        return (List<Pergunta>) (List<?>) dataBaseQueryHelper.getList(cursor);
     }
 
     @Override
     public List<Pergunta> list(String selection, String... selectionArgs) {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(selection, selectionArgs),null);
+        return (List<Pergunta>) (List<?>) dataBaseQueryHelper.getList(cursor);
     }
 
     @Override
     public Pergunta get(String selection, String... selectionArgs) {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementElement(selection, selectionArgs),null);
+        return (Pergunta) dataBaseQueryHelper.getElement(cursor);
     }
 
     @Override
     public Pergunta getFirst() {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementFirst(),null);
+        return (Pergunta) dataBaseQueryHelper.getElement(cursor);
     }
 
 

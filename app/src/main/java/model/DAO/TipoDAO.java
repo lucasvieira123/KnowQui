@@ -67,6 +67,11 @@ public class TipoDAO extends SQLiteOpenHelper implements DAO<Tipo>{
     }
 
     @Override
+    public void removeAll() {
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
+    }
+
+    @Override
     public List<Tipo> list() {
         return null;
     }

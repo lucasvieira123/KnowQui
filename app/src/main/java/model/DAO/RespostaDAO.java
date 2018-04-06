@@ -43,7 +43,8 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Resposta` " +
                 "( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL," +
-                " `Pergunta_id` INTEGER NOT NULL," +
+                " `letra` TEXT NOT NULL," +
+                " `id_pergunta` INTEGER NOT NULL," +
                 " `EhCorreta` INTEGER NOT NULL )";
 
         db.execSQL(CREATE_TABLE);
@@ -67,6 +68,11 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
 
     @Override
     public void remove(Integer id) {
+
+    }
+
+    @Override
+    public void removeAll() {
 
     }
 

@@ -27,6 +27,8 @@ public interface DAO<entity> {
 
     void remove(Integer id);
 
+    void removeAll();
+
     List<entity> list();
 
     List<entity> list( String selection, String... selectionArgs);

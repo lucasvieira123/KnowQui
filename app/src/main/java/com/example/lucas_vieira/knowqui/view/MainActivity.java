@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 
-        historicoDAO.list();
+
 
 
 
@@ -68,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
         NivelDAO nivelDAO = NivelDAO.getInstance(context);
 
         PerguntaDAO perguntaDAO = PerguntaDAO.getInstance(context);
+        perguntaDAO.removeAll();
 
         RespostaDAO respostaDAO = RespostaDAO.getInstance(context);
+        respostaDAO.removeAll();
 
         TipoDAO tipoDAO = TipoDAO.getInstance(context);
 

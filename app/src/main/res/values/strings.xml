@@ -7,5 +7,14 @@
         <item>Terceiro Ano</item>
     </string-array>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="dados_cadastrais_textview_cadastro_fragment">Dados Cadastrais</string>
+    <string name="nome_hint_edittext_cadastro_fragment">Nome:</string>
+    <string name="idade_hint_edittext_cadastro_fragment">idade:</string>
+    <string name="rede_de_ensino_textview_cadastro_fragment">Rede de Ensino:</string>
+    <string name="publico_checkbox_cadastro_fragment">Publico</string>
+    <string name="privado_chackbox_cadastro_fragment">Privado</string>
+    <string name="escolaridade_textview__cadastro_fragment">Escolaridade:</string>
+    <string name="sexo_textview_cadastro_fragment">Sexo:</string>
+    <string name="salvar_button_cadastro_fragment">Salvar</string>
 
 </resources>

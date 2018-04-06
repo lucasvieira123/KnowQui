@@ -26,7 +26,7 @@ public class DataBaseQueryHelper {
     private final Field[] privateAttributes;
     private Map<String,Class> fieldAndTypes = new HashMap();
     private final String columnsSeparateWithComma;
-    private static String NAME_TABLE = null;
+    private String NAME_TABLE = null;
 
     public DataBaseQueryHelper(Class classe) {
         this.classe = classe;
@@ -50,12 +50,19 @@ public class DataBaseQueryHelper {
         int countPrivateAttributes = allAttributesPrivatesAndPublics.length - COUNT_DEFAULT_FIELDS_PUBLIC;
         Field[] privateAttributes = new Field[countPrivateAttributes];
         for (int i = 0; i < allAttributesPrivatesAndPublics.length; i++) {
-            if (isPrivate(allAttributesPrivatesAndPublics[i])) {
+            if (isPrivate(allAttributesPrivatesAndPublics[i]) && notStartWithUnderscore(allAttributesPrivatesAndPublics[i])) {
                 privateAttributes[i] = allAttributesPrivatesAndPublics[i];
             }
         }
 
+
+
         return privateAttributes;
+    }
+
+    private boolean notStartWithUnderscore(Field field) {
+        return !field.getName().substring(0,1).contains("_");
+
     }
 
     private boolean isPrivate(Field attribute) {
@@ -273,5 +280,9 @@ public class DataBaseQueryHelper {
 
     public String getStatementFirst() {
         return "SELECT * FROM "+NAME_TABLE+" ORDER BY id ASC LIMIT 1";
+    }
+
+    public String getStatementRemoveAll() {
+        return "DELETE FROM "+NAME_TABLE;
     }
 }

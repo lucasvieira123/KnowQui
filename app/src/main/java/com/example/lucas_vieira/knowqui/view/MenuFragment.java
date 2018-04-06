@@ -5,13 +5,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.lucas_vieira.knowqui.R;
+
+
 
 public class MenuFragment extends Fragment {
 
@@ -42,6 +42,38 @@ private TextView iniciarJogo;
     }
 
     private void onClickIniciarJogo() {
+    //  requisitarPerguntasEPreencherNoBanco();
+      chamarTelaDePergunta();
+
+
+
+    }
+
+//    @SuppressLint("StaticFieldLeak")
+//    private void requisitarPerguntasEPreencherNoBanco() {
+//        new AsyncTask<String, Long, Void>() {
+//
+//            @Override
+//            protected void onProgressUpdate(Long... values) {
+//                super.onProgressUpdate(values);
+//            }
+//
+//            @Override
+//            protected Void doInBackground(String... url) {
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                super.onPostExecute(aVoid);
+//            }
+//
+//        }.execute(RequestAndResponseUrlConst.LISTA_PERGUNTA);
+//    }
+
+    private void chamarTelaDePergunta() {
+
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         PerguntaFragment perguntaFragment = new PerguntaFragment();
@@ -51,9 +83,5 @@ private TextView iniciarJogo;
                 perguntaFragment.getClass().getSimpleName());
 
         fragmentTransaction.commit();
-
-        /* todo devo da o finish?*/
-
-
     }
 }
