@@ -1,5 +1,6 @@
 package com.example.lucas_vieira.knowqui.view;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -80,5 +81,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment perguntaFragment = getFragmentManager().findFragmentByTag("PerguntaFragment");
+        if(perguntaFragment.isVisible()){
+            return;
+        }else {
+            super.onBackPressed();
+        }
     }
 }

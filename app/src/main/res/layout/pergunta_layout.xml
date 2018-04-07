@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+
     android:orientation="vertical">
 
 
     <android.support.constraint.ConstraintLayout
-
+        android:id="@+id/pergunta_layout_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -77,7 +78,7 @@
             android:focusable="true"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/progressBar"
+            app:layout_constraintEnd_toStartOf="@+id/cronometro"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_d" />
 
@@ -94,14 +95,16 @@
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/progressBar"
+            app:layout_constraintStart_toEndOf="@+id/cronometro"
             app:layout_constraintTop_toBottomOf="@+id/item_d" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
+
+        <TextView
+            android:id="@+id/cronometro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:inputType="datetime"
+            android:text="00:00"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -113,72 +116,72 @@
 
         <TextView
             android:id="@+id/item_b"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/selector_itens_pergunta"
             android:clickable="true"
-            android:focusable="true"
             android:enabled="true"
+            android:focusable="true"
             android:text="-TEXTO-ITEM-B-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_a"
-            android:background="@drawable/selector_itens_pergunta"/>
+            app:layout_constraintTop_toBottomOf="@+id/item_a" />
 
         <TextView
             android:id="@+id/item_a"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/selector_itens_pergunta"
             android:clickable="true"
-            android:focusable="true"
             android:enabled="true"
+            android:focusable="true"
             android:text="-TEXTO-ITEM-A-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/texto_secundario"
-            android:background="@drawable/selector_itens_pergunta"/>
+            app:layout_constraintTop_toBottomOf="@+id/texto_secundario" />
 
 
         <TextView
             android:id="@+id/item_d"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/selector_itens_pergunta"
             android:clickable="true"
-            android:focusable="true"
             android:enabled="true"
+            android:focusable="true"
             android:text="-TEXTO-ITEM-D-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_c"
-            android:background="@drawable/selector_itens_pergunta"/>
+            app:layout_constraintTop_toBottomOf="@+id/item_c" />
 
         <TextView
             android:id="@+id/item_c"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/selector_itens_pergunta"
             android:clickable="true"
-            android:focusable="true"
             android:enabled="true"
+            android:focusable="true"
             android:text="-TEXTO-ITEM-C-HOLDER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_b"
-            android:background="@drawable/selector_itens_pergunta"/>
+            app:layout_constraintTop_toBottomOf="@+id/item_b" />
 
 
     </android.support.constraint.ConstraintLayout>

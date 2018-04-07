@@ -21,22 +21,22 @@ public interface DAO<entity> {
     limit                                     // Limit
     */
 
-    void add(entity e);
+    void add(entity e) throws Exception;
 
-    void remove(entity e);
+    void remove(entity e) throws Exception;
 
-    void remove(Integer id);
+    void remove(Integer id)throws Exception;
 
-    void removeAll();
+    void removeAll()throws Exception;
 
-    List<entity> list();
+    List<entity> list()throws Exception;
 
-    List<entity> list( String selection, String... selectionArgs);
+    List<entity> list( String selection, String... selectionArgs)throws Exception;
 
-    entity get(String selection, String... selectionArgs);
+    entity get(String selection, String... selectionArgs)throws Exception;
 
-    entity getFirst();
+    entity getFirst()throws Exception;
 
-    Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit);
+    Cursor getCursor(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit)throws Exception;
 
 }

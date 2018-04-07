@@ -2,7 +2,8 @@ package com.example.lucas_vieira.knowqui.view;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.os.AsyncTask;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -15,26 +16,19 @@ import android.widget.Toast;
 
 import com.example.lucas_vieira.knowqui.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import custom.RequestAndResponseUrlConst;
 import model.DAO.PerguntaDAO;
 import model.DAO.RespostaDAO;
 import model.Pergunta;
 import model.Resposta;
-import utils.CarregamentoDialog;
 
 /**
  * Created by lucas-vieira on 09/03/18.
@@ -51,11 +45,21 @@ public class PerguntaFragment extends Fragment {
     private TextView itemD;
     private ImageView imagemPular;
     private ImageView imagemValidar;
+    private TextView cronometro;
     private final static String TEXTO_TESTE = "Quem pretende acompanhar alguns jogos da Copa do Mundo na Rússia, entre 14 de junho e 15 de julho de 2018, já precisa começar a se planejar financeiramente. Apesar de a experiência ser inesquecível, os valores a serem desembolsados são muito altos e podem fazer muito torcedor fanático desistir - ou escolher outros destino.";
+    List<Pergunta>perguntas;
+    Integer indexQuestaoAtual = 0;
+    Fragment thisFragment = this;
 
     private TextView ultimoItemSelecionado;
 
     /*todo verificar se não tem que ser fragment v4*/
+
+    public PerguntaFragment() {
+        PerguntaDAO perguntaDAO = PerguntaDAO.getInstance(getActivity());
+        perguntas =  perguntaDAO.list();
+
+    }
 
     @Nullable
     @Override
@@ -67,8 +71,9 @@ public class PerguntaFragment extends Fragment {
         textoPrincial = layout.findViewById(R.id.texto_princial);
 
         imagemDaPergunta = layout.findViewById(R.id.imagem);
-
+        cronometro = layout.findViewById(R.id.cronometro);
         textoSecundario = layout.findViewById(R.id.texto_secundario);
+
 
         itemA = layout.findViewById(R.id.item_a);
         itemA.setOnClickListener(onClickListenerItens());
@@ -96,24 +101,28 @@ public class PerguntaFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        Pergunta perguntaAtual = perguntas.get(indexQuestaoAtual);
+
+        preencherViewComBaseNaPergunta(perguntaAtual);
+
 //        String jgon = jsonTeste();
 
-        final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
-        carregamentoDialog.show();
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-               String jsonString = configurandoERequisitando();
-                salvaNoBd(jsonString);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                carregamentoDialog.dismiss();
-            }
-        }.execute();
+//        final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
+//        carregamentoDialog.show();
+//
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//               String jsonString = configurandoERequisitando();
+//                salvaNoBd(jsonString);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                carregamentoDialog.dismiss();
+//            }
+//        }.execute();
 
 //        Call<Pergunta[]> call = new RetrofitConfig().getPerguntaService().listaDePerguntas();
 //        call.enqueue(new Callback<Pergunta[]>() {
@@ -131,134 +140,120 @@ public class PerguntaFragment extends Fragment {
 
 
 
+//
+//        /*TESTES*/
+//        //teste texto
+//        textoPrincial.setText(TEXTO_TESTE);
+//        textoSecundario.setText(TEXTO_TESTE);
+//        itemA.setText(TEXTO_TESTE);
+//        itemB.setText(TEXTO_TESTE);
+//        itemC.setText(TEXTO_TESTE);
+//        itemD.setText(TEXTO_TESTE);
+//        //teste visibilidade
+//        //imagemDaPergunta.setVisibility(View.GONE);
+//        //textoSecundario.setVisibility(View.GONE);
 
-        /*TESTES*/
-        //teste texto
-        textoPrincial.setText(TEXTO_TESTE);
-        textoSecundario.setText(TEXTO_TESTE);
-        itemA.setText(TEXTO_TESTE);
-        itemB.setText(TEXTO_TESTE);
-        itemC.setText(TEXTO_TESTE);
-        itemD.setText(TEXTO_TESTE);
+    }
+
+    private void preencherViewComBaseNaPergunta(Pergunta perguntaAtual) {
+       RespostaDAO respostaDAO = RespostaDAO.getInstance(getActivity());
+        List<Resposta> respostasDaQuestaoAtual = respostaDAO.list("id_pergunta = %s", String.valueOf(perguntaAtual.getId()));
+
+
+
+       textoTipo.setText(perguntaAtual.getTipo());
+       textoPrincial.setText(perguntaAtual.getDescricao());
+
+
+       if(perguntaAtual.getComplemento() != null){
+           textoSecundario.setVisibility(View.VISIBLE);
+           textoSecundario.setText(perguntaAtual.getComplemento());
+       }else {
+           textoSecundario.setVisibility(View.GONE);
+       }
+
+       if(perguntaAtual.getDiretorioImagem() != null && perguntaAtual.getImagem()!= null){
+
+           String imagemUrlString = perguntaAtual.getDiretorioImagem().concat(perguntaAtual.getImagem());
+
+           try {
+               URL imagemUrl = new URL(imagemUrlString);
+               Picasso.get().load(imagemUrl.toString()).fit().into(imagemDaPergunta);
+           } catch (MalformedURLException e) {
+               Toast.makeText(getActivity(),"Problema ao carregar imagem", Toast.LENGTH_SHORT).show();
+           }
+
+
+           imagemDaPergunta.setVisibility(View.VISIBLE);
+
+       }else {
+           imagemDaPergunta.setVisibility(View.GONE);
+       }
+
+        itemA.setText(respostasDaQuestaoAtual.get(0).getDescricao());
+        itemB.setText(respostasDaQuestaoAtual.get(1).getDescricao());
+        itemC.setText(respostasDaQuestaoAtual.get(2).getDescricao());
+        itemD.setText(respostasDaQuestaoAtual.get(3).getDescricao());
+        Integer tempoEmMinutos = perguntaAtual.getTempo();
+
+        final Integer[] tempoEmSegundos = {tempoEmMinutos * 60};
+
+        Timer timer = new Timer();
+        try{
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        if(tempoEmSegundos[0] == 0){
+                            aoEsgotaTempo();
+                            cancel();
+                        }
+
+                       cronometro.setText(String.valueOf(stringTempoFormatado(tempoEmSegundos[0])));
+                        tempoEmSegundos[0]--;
+
+                    }
+                });
+
+            }
+        },0,1000);}catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+//        /*TESTES*/
+//        //teste texto
+//        textoPrincial.setText(TEXTO_TESTE);
+//        textoSecundario.setText(TEXTO_TESTE);
+//        itemA.setText(TEXTO_TESTE);
+//        itemB.setText(TEXTO_TESTE);
+//        itemC.setText(TEXTO_TESTE);
+//        itemD.setText(TEXTO_TESTE);
         //teste visibilidade
         //imagemDaPergunta.setVisibility(View.GONE);
         //textoSecundario.setVisibility(View.GONE);
-
     }
 
-    private void salvaNoBd(String jsonString) {
-
-        JSONArray jsonArrayPerguntas = null;
-        try {
-            jsonArrayPerguntas = new JSONArray(jsonString);
-
-
-        for( int i =0; i< jsonArrayPerguntas.length(); i++) {
-            JSONObject jsonObjectPergunta = (JSONObject) jsonArrayPerguntas.get(i);
-            JSONObject jsonObjectPerguntaPropriamenteDito = (JSONObject) jsonObjectPergunta.get("pergunta");
-            String idPergunta = jsonObjectPerguntaPropriamenteDito.getString("id");
-            String descricaoPergunta = jsonObjectPerguntaPropriamenteDito.getString("descricao");
-            Integer tempoPergunta = jsonObjectPerguntaPropriamenteDito.getInt("tempo");
-            String imgPergunta = jsonObjectPerguntaPropriamenteDito.getString("img");
-            String diretorioImgPergunta = jsonObjectPerguntaPropriamenteDito.getString("diretorioImg");
-            String tipoPergunta = jsonObjectPerguntaPropriamenteDito.getString("tipo");
-            String nivelPergunta = jsonObjectPerguntaPropriamenteDito.getString("nivel");
-            String complementoPergunta = jsonObjectPerguntaPropriamenteDito.getString("complemento");
-
-            PerguntaDAO perguntaDAO = PerguntaDAO.getInstance(getActivity());
-            Pergunta pergunta = new Pergunta();
-
-            pergunta.setId(Integer.valueOf(idPergunta));
-            pergunta.setDescricao(descricaoPergunta);
-            pergunta.setTempo(tempoPergunta);
-            pergunta.setImagem(imgPergunta);
-            pergunta.setDiretorioImagem(diretorioImgPergunta);
-            pergunta.setTipo(tipoPergunta);
-            pergunta.setNivel(nivelPergunta);
-            pergunta.setComplemento(complementoPergunta);
-
-            perguntaDAO.add(pergunta);
-
-            JSONArray jsonArrayResposta = jsonObjectPerguntaPropriamenteDito.getJSONArray("resposta");
-
-            for( int j =0; j<jsonArrayResposta.length();j++){
-                JSONObject jsonObjectRespostaPropriamenteDito = (JSONObject) jsonArrayResposta.get(j);
-                String idResposta = jsonObjectRespostaPropriamenteDito.getString("id");
-                String descricaoResposta = jsonObjectRespostaPropriamenteDito.getString("descricao");
-                Integer ehCorretaResposta = jsonObjectRespostaPropriamenteDito.getInt("ehCorreta");
-                String _indexResposta = jsonObjectRespostaPropriamenteDito.getString("_index");
-                String id_pergunta = jsonObjectRespostaPropriamenteDito.getString("id_pergunta");
-
-                Resposta resposta = new Resposta();
-                resposta.setId(Integer.valueOf(idResposta));
-                resposta.setDescricao(descricaoResposta);
-                resposta.setEhCorreta(ehCorretaResposta);
-                resposta.setLetraResposta(_indexResposta);
-                resposta.setId_pergunta(Integer.valueOf(id_pergunta));
-
-                RespostaDAO respostaDAO = RespostaDAO.getInstance(getActivity());
-                respostaDAO.add(resposta);
-            }
-
-
-
+    private void aoEsgotaTempo() {
+        if(indexQuestaoAtual==perguntas.size()-1){
+            chamarTelaAgradecimento();
+        }else {
+            carregarNovaPergunta();
         }
-
-
-
-        } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
     }
 
-    private String configurandoERequisitando() {
-
-        URL url = null;
-        try {
-            url = new URL(RequestAndResponseUrlConst.LISTA_PERGUNTA);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpURLConnection connection = null;
-        try {
-            connection = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            connection.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        connection.setRequestProperty("Content-type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
-            connection.setConnectTimeout(5000);
-        try {
-            connection.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(url.openStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        StringBuilder resposta = new StringBuilder();
-
-        while (scanner.hasNext()) {
-            resposta.append(scanner.next());
-        }
-
-        return resposta.toString();
+    private String stringTempoFormatado(Integer tempoEmSegundos) {
+        String minuto = String.valueOf(tempoEmSegundos/60);
+        String segundos = String.format("%02d",tempoEmSegundos%60);
 
 
+
+        return minuto+":"+segundos;
     }
+
 
     private String jsonTeste() {
         List<Pergunta> perguntas = new ArrayList<>();
@@ -289,14 +284,14 @@ public class PerguntaFragment extends Fragment {
         resposta1.setDescricao("descricao1");
         resposta1.setEhCorreta(1);
         resposta1.setId(1);
-        resposta1.setLetraResposta("a");
+        resposta1.setLetra("a");
         resposta1.setId_pergunta(1);
 
         Resposta resposta2 = new Resposta();
         resposta2.setDescricao("descricao2");
         resposta2.setEhCorreta(2);
         resposta2.setId(2);
-        resposta2.setLetraResposta("b");
+        resposta2.setLetra("b");
         resposta2.setId_pergunta(2);
 
         List<Resposta> respostas = new ArrayList<>();
@@ -318,15 +313,46 @@ public class PerguntaFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.pular_imageView:
-                        Toast.makeText(getActivity().getBaseContext(), "Pular", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity().getBaseContext(), "Pulado", Toast.LENGTH_SHORT).show();
+                        if(indexQuestaoAtual==perguntas.size()-1){
+                            chamarTelaAgradecimento();
+                        }else {
+                            carregarNovaPergunta();
+                        }
                         break;
 
                     case R.id.validar_imageView:
-                        Toast.makeText(getActivity().getBaseContext(), "Validar", Toast.LENGTH_SHORT).show();
+                        if(indexQuestaoAtual==perguntas.size()-1){
+                            chamarTelaAgradecimento();
+                        }else {
+                            carregarNovaPergunta();
+                        }
+
                         break;
                 }
             }
         };
+    }
+
+    private void chamarTelaAgradecimento() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AgradecimentoFragment agradecimentoFragment = new AgradecimentoFragment();
+
+        fragmentTransaction.replace(R.id.pergunta_layout_id,
+                agradecimentoFragment,
+                agradecimentoFragment.getClass().getSimpleName());
+
+        fragmentTransaction.commit();
+    }
+
+    private void carregarNovaPergunta() {
+        indexQuestaoAtual++;
+        getActivity().getFragmentManager()
+                .beginTransaction()
+                .detach(thisFragment)
+                .attach(thisFragment)
+                .commit();
     }
 
     private View.OnClickListener onClickListenerItens() {

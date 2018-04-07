@@ -93,7 +93,12 @@ public class DataBaseQueryHelper {
             attribute = privateAttributes[i].getName();
             getMethedName = createNameMethedWithGetFrom(attribute);
             value = tryGetValue(o, getMethedName);
-            valuesSepareteWithComma = valuesSepareteWithComma + value.concat(",");
+            if(value == null){
+                valuesSepareteWithComma = valuesSepareteWithComma + "null".concat(",");
+            }else {
+                valuesSepareteWithComma = valuesSepareteWithComma + value.concat(",");
+            }
+
         }
         return removeLastComma(valuesSepareteWithComma);
     }
@@ -122,7 +127,9 @@ public class DataBaseQueryHelper {
         }
 
         //todo pogue,tentar usar algum padrão de projeto, por exemplo chain of resp.
-        if (result instanceof Integer) {
+        if(result.equals("null")){
+            return null;
+        }else if (result instanceof Integer) {
             valueInteger = ((Integer) result);
             return String.valueOf(valueInteger);
 
@@ -139,6 +146,7 @@ public class DataBaseQueryHelper {
                 return "1";
             } else {
                 return "0";
+
             }
         }
 

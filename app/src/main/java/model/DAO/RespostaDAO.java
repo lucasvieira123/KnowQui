@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import model.Historico;
 import model.Resposta;
 import utils.DataBaseQueryHelper;
 
@@ -58,42 +57,48 @@ public class RespostaDAO extends SQLiteOpenHelper implements DAO<Resposta> {
 
     @Override
     public void add(Resposta e) {
-        dataBaseQueryHelper = new DataBaseQueryHelper(Historico.class);
+
+        database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
     @Override
     public void remove(Resposta e) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementDelete(e));
     }
 
     @Override
     public void remove(Integer id) {
-
+        database.execSQL(dataBaseQueryHelper.getStatementDelete(id));
     }
 
     @Override
     public void removeAll() {
-
+        database.execSQL(dataBaseQueryHelper.getStatementRemoveAll());
     }
 
     @Override
     public List<Resposta> list() {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(),null);
+        return (List<Resposta>) (List<?>) dataBaseQueryHelper.getList(cursor);
     }
 
     @Override
     public List<Resposta> list(String selection, String... selectionArgs) {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementList(selection, selectionArgs),null);
+        return (List<Resposta>) (List<?>) dataBaseQueryHelper.getList(cursor);
     }
 
     @Override
     public Resposta get(String selection, String... selectionArgs) {
-        return null;
+
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementElement(selection, selectionArgs),null);
+        return (Resposta) dataBaseQueryHelper.getElement(cursor);
     }
 
     @Override
     public Resposta getFirst() {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementFirst(),null);
+        return (Resposta) dataBaseQueryHelper.getElement(cursor);
     }
 
 

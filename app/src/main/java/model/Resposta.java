@@ -50,7 +50,7 @@ public class Resposta extends Bean{
         return letra;
     }
 
-    public void setLetraResposta(String letra) {
+    public void setLetra(String letra) {
         this.letra = letra;
     }
 }
