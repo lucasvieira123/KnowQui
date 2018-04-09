@@ -34,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        CadastroFragment cadastroFragment = new CadastroFragment();
-
-        fragmentTransaction.replace(R.id.layout_main,cadastroFragment,cadastroFragment.getClass().getSimpleName());
+        LoginFragment loginFragment = new LoginFragment();
+        fragmentTransaction.replace(R.id.layout_main, loginFragment, loginFragment.getClass().getSimpleName());
         fragmentTransaction.commit();
 
     }
