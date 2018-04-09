@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment perguntaFragment = getFragmentManager().findFragmentByTag("PerguntaFragment");
-        if(perguntaFragment.isVisible()){
-            return;
-        }else {
-            super.onBackPressed();
+        if (perguntaFragment != null){
+            if (perguntaFragment.isVisible())
+                return;
         }
+        super.onBackPressed();
     }
 }
