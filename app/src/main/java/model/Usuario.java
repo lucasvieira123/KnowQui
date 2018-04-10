@@ -5,17 +5,43 @@ package model;
  */
 
 public class Usuario extends Bean{
-    private Integer Login_id;
     private String nome;
-    private Integer idade;
     private Integer id;
+    private String login;
+    private String senha;
+    private int rede_ensino;
+    private String sexo;
 
-    public Integer getLogin_id() {
-        return Login_id;
+    public String getSexo() {
+        return sexo;
     }
 
-    public void setLogin_id(Integer login_id) {
-        this.Login_id = login_id;
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public int getRede_ensino() {
+        return rede_ensino;
+    }
+
+    public void setRede_ensino(int rede_ensino) {
+        this.rede_ensino = rede_ensino;
     }
 
     public String getNome() {
@@ -24,14 +50,6 @@ public class Usuario extends Bean{
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Integer getIdade() {
-        return idade;
-    }
-
-    public void setIdade(Integer idade) {
-        this.idade = idade;
     }
 
     public Integer getId() {

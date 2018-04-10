@@ -40,12 +40,23 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Usuario` \n" +
+        /*String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Usuario` \n" +
                 "(\n" +
                 " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
                 " `nome` TEXT NOT NULL,\n" +
                 " `idade` INTEGER NOT NULL,\n" +
                 " `Login_id` INTEGER NOT NULL \n" +
+                " )";
+
+        db.execSQL(CREATE_TABLE);*/
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `Usuario` \n" +
+                "(\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                " `nome` TEXT NOT NULL,\n" +
+                " `rede_ensino` INTEGER NOT NULL,\n"+
+                " `login` TEXT UNIQUE,\n"+
+                " `senha` TEXT, \n"+
+                " `sexo` TEXT\n"+
                 " )";
 
         db.execSQL(CREATE_TABLE);
@@ -59,7 +70,8 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
 
     @Override
     public void add(Usuario e) {
-        dataBaseQueryHelper = new DataBaseQueryHelper(Historico.class);
+        dataBaseQueryHelper = new DataBaseQueryHelper(Usuario.class);
+        database.execSQL(dataBaseQueryHelper.getStatementInsert(e));
     }
 
     @Override
