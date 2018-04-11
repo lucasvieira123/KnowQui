@@ -71,6 +71,11 @@ public class CadastroFragment extends Fragment {
         editTextSenha = layout.findViewById(R.id.cadastrar_usuario_senha);
         editTextConfirmarSenha = layout.findViewById(R.id.cadastrar_usuario_confirmar_senha);
 
+        editTextLogin.setOnFocusChangeListener(desabilitarErroInputText);
+        editTextNome.setOnFocusChangeListener(desabilitarErroInputText);
+        editTextSenha.setOnFocusChangeListener(desabilitarErroInputText);
+        editTextConfirmarSenha.setOnFocusChangeListener(desabilitarErroInputText);
+
         inputSenha = layout.findViewById(R.id.cadastrar_usuario_input_layout_senha);
         inputConfirmarSenha = layout.findViewById(R.id.cadastro_usuario_input_layout_confirmar_senha);
         inputNome = layout.findViewById(R.id.cadastrar_usuario_input_layout_nome);
@@ -97,7 +102,11 @@ public class CadastroFragment extends Fragment {
                     return;
                 }
 
-                if (!validarPreenchimentoCampos()){
+                if (validarPreenchimentoCampos()){
+                    return;
+                }
+
+                if (validarTamanhoMinimoSenha()){
                     return;
                 }
 
@@ -159,7 +168,7 @@ public class CadastroFragment extends Fragment {
                                     return;
                                 }
 
-                                chamarMenuFragment();
+                                chamaLoginFragment();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -177,12 +186,25 @@ public class CadastroFragment extends Fragment {
         String confirmarSenha = editTextConfirmarSenha.getText().toString();
 
         if (senha.equals(confirmarSenha)){
+            inputConfirmarSenha.setErrorEnabled(false);
             return true;
         }else{
+            inputConfirmarSenha.setErrorEnabled(true);
             inputConfirmarSenha.setError("As senhas não conferem!");
             inputConfirmarSenha.setErrorTextAppearance(R.color.errorMessage);
             return false;
         }
+    }
+
+    private boolean validarTamanhoMinimoSenha(){
+        if (editTextSenha.getText().toString().length() < 6 ){
+            inputSenha.setErrorEnabled(true);
+            inputSenha.setError("A senha deve conter no mínino 6 caracteres!");
+            return true;
+        }
+
+        return false;
+
     }
 
     private boolean validarPreenchimentoCampos(){
@@ -193,18 +215,22 @@ public class CadastroFragment extends Fragment {
 
         if (nome.isEmpty() || login.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
             if (nome.isEmpty()) {
+                inputNome.setErrorEnabled(true);
                 inputNome.setError("Campo Obrigatório!");
             }
 
             if (login.isEmpty()) {
+                inputLogin.setErrorEnabled(true);
                 inputLogin.setError("Campo Obrigatório!");
             }
 
             if (senha.isEmpty()) {
+                inputSenha.setErrorEnabled(true);
                 inputSenha.setError("Campo Obrigatório!");
             }
 
             if (confirmarSenha.isEmpty()) {
+                inputConfirmarSenha.setErrorEnabled(true);
                 inputConfirmarSenha.setError("Campo Obrigatório!");
             }
 
@@ -214,6 +240,17 @@ public class CadastroFragment extends Fragment {
         }
     }
 
+    View.OnFocusChangeListener desabilitarErroInputText = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean b) {
+            if (view.hasFocus()){
+                inputNome.setErrorEnabled(false);
+                inputLogin.setErrorEnabled(false);
+                inputSenha.setErrorEnabled(false);
+                inputConfirmarSenha.setErrorEnabled(false);
+            }
+        }
+    };
 
 
 
@@ -231,7 +268,7 @@ public class CadastroFragment extends Fragment {
         return json.contains("error");
     }
 
-    private void chamarMenuFragment() {
+    private void chamaLoginFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
