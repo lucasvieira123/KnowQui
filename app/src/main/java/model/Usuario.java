@@ -9,7 +9,7 @@ public class Usuario extends Bean{
     private Integer id;
     private String login;
     private String senha;
-    private int rede_ensino;
+    private Integer rede_ensino;
     private String sexo;
 
     public String getSexo() {
