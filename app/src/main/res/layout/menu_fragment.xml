@@ -8,25 +8,18 @@
     android:orientation="vertical"
     tools:context="com.example.lucas_vieira.knowqui.view.MenuFragment">
 
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/textoIniciarId"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textoIniciarId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="Iniciar Jogo"
-            android:textColor="@android:color/background_light"
-            android:textSize="40dp"
-            android:textStyle="bold"
-             />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Iniciar Jogo"
+        android:layout_gravity="end"
+        android:textColor="@android:color/background_light"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        />
 
 
 </LinearLayout>

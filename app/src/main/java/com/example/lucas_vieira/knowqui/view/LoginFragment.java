@@ -35,8 +35,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Objects;
 
+import custom.RequestAndResponseUrlConst;
 import model.DAO.UsuarioDAO;
 import model.Usuario;
 import utils.CarregamentoDialog;
@@ -49,21 +49,20 @@ public class LoginFragment extends Fragment {
     Button logarBtn;
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.login_fragment,container,false);
+        View layout = inflater.inflate(R.layout.login_fragment, container, false);
 
-        loginEdtTxt =layout.findViewById(R.id.edit_text_login);
+        loginEdtTxt = layout.findViewById(R.id.edit_text_login);
 
         senhaEdtTxt = layout.findViewById(R.id.edit_text_senha);
 
-        logarBtn = layout.findViewById(R.id.button_logar );
+        logarBtn = layout.findViewById(R.id.button_logar);
         logarBtn.setOnClickListener(onClickListener());
 
-         cadastrarTxtView = layout.findViewById(R.id.textview_cadastrar);
-         cadastrarTxtView.setOnClickListener(onClickListener());
+        cadastrarTxtView = layout.findViewById(R.id.textview_cadastrar);
+        cadastrarTxtView.setOnClickListener(onClickListener());
 
         return layout;
     }
@@ -76,19 +75,38 @@ public class LoginFragment extends Fragment {
         login = loginEdtTxt.getText().toString();
 
         senha = senhaEdtTxt.getText().toString();
+
+        loginEdtTxt.setText("joao1");
+        senhaEdtTxt.setText("1234");
     }
 
     private View.OnClickListener onClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getId() == R.id.button_logar ){
-                    logar();
-                }else if(v.getId() == R.id.textview_cadastrar){
+                if (v.getId() == R.id.button_logar) {
+                    if(existemCamposVazios()){
+                        Toast.makeText(getActivity().getBaseContext(),"Existem campos vazios",Toast.LENGTH_LONG).show();
+                    }else {
+                        logar();
+                    }
+                } else if (v.getId() == R.id.textview_cadastrar) {
                     chamarTelaCadastro();
                 }
             }
         };
+    }
+
+    private boolean existemCamposVazios() {
+        String login = loginEdtTxt.getText().toString();
+
+        String senha = senhaEdtTxt.getText().toString();
+
+        if(login.isEmpty() || login.equals("") || senha.isEmpty() || senha.equals("")){
+            return true;
+        }
+
+        return false;
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -96,7 +114,7 @@ public class LoginFragment extends Fragment {
         final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
         carregamentoDialog.show();
 
-        new AsyncTask<Void, Void, HttpResponse>(){
+        new AsyncTask<Void, Void, String>() {
 
             HttpClient cliente = new DefaultHttpClient();
             HttpResponse response;
@@ -104,9 +122,9 @@ public class LoginFragment extends Fragment {
 
 
             @Override
-            protected HttpResponse doInBackground(Void... voids) {
+            protected String doInBackground(Void... voids) {
 
-                HttpPost post = new HttpPost("http://knowqui.com.br/logar");
+                HttpPost post = new HttpPost(RequestAndResponseUrlConst.LOGAR);
                 try {
                     login.put("login", loginEdtTxt.getText().toString());
                     login.put("senha", senhaEdtTxt.getText().toString());
@@ -116,13 +134,14 @@ public class LoginFragment extends Fragment {
                     response = cliente.execute(post);
                     System.out.println("reponse: " + response.toString());
 
-                    return response;
+                    InputStream inputStream = response.getEntity().getContent();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                    String json = getStringFromInputStream(inputStream);
+                    inputStream.close();
+
+                    return json;
+
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
 
@@ -131,38 +150,45 @@ public class LoginFragment extends Fragment {
 
             @SuppressLint("ShowToast")
             @Override
-            protected void onPostExecute(HttpResponse httpResponse) {
+            protected void onPostExecute(String jsonResponse) {
                 carregamentoDialog.dismiss();
-                if (response != null){
-                    try{
-                        InputStream inputStream = response.getEntity().getContent();
+                if (response != null) {
 
-                        String json = getStringFromInputStream(inputStream);
-                        inputStream.close();
-
-                        if (verificaSeExisteStringDeErro(json)){
-                            //TODO criar um dialog, pois o toast nao funciona.
-                            Toast.makeText(getActivity(), "Ocorreu um erro: ".concat(pegarMensagemErro(json)), Toast.LENGTH_LONG);
-                            return;
-                        }
-
-                        InserirUsuarioBDViaJson(json);
-                    }catch (IOException e) {
-                        Toast.makeText(getActivity(), "Ocorreu um erro: " + e.getMessage(), Toast.LENGTH_SHORT);
+                    if (verificaSeExisteStringDeErro(jsonResponse)) {
+                        Toast.makeText(getActivity(), "Ocorreu um erro: "+pegarMensagemErro(jsonResponse), Toast.LENGTH_LONG).show();
+                        return;
                     }
 
-                    Toast.makeText(getActivity(), "Bem vindo!", Toast.LENGTH_SHORT);
+                    inserirUsuarioBDViaJson(jsonResponse);
+
+                    UsuarioDAO usuarioDAO = UsuarioDAO.getInstance(getActivity().getBaseContext());
+                    Usuario usuarioLogado = usuarioDAO.getFirst();
+
+                    Toast.makeText(getActivity(), "Bem vindo, "+usuarioLogado.getNome()+"!", Toast.LENGTH_SHORT).show();
+                    chamarTelaMenu();
                 }
             }
 
         }.execute();
     }
 
-    private boolean verificaSeExisteStringDeErro(String json){
+    private void chamarTelaMenu() {
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        MenuFragment menuFragment = new MenuFragment();
+
+        fragmentTransaction.replace(R.id.layout_main, menuFragment, menuFragment.getClass().getSimpleName());
+
+        fragmentTransaction.commit();
+    }
+
+    private boolean verificaSeExisteStringDeErro(String json) {
         return json.contains("error");
     }
 
-    private String pegarMensagemErro(String json){
+    private String pegarMensagemErro(String json) {
         try {
             JSONArray jsonArray = new JSONArray(json);
             JSONObject mensagem = new JSONObject(jsonArray.getString(0));
@@ -175,7 +201,7 @@ public class LoginFragment extends Fragment {
         return null;
     }
 
-    private void InserirUsuarioBDViaJson(String json) {
+    private void inserirUsuarioBDViaJson(String json) {
         UsuarioDAO usuarioDAO = UsuarioDAO.getInstance(getActivity());
         try {
             JSONArray usuarioJson = new JSONArray(json);
@@ -184,7 +210,7 @@ public class LoginFragment extends Fragment {
             for (int i = 0; i < usuarioJson.length(); i++) {
                 usuarioJsonObj = new JSONObject(usuarioJson.getString(i));
 
-                Log.i("USUARIO", "InserirUsuarioBDViaJson: Usuario Encontrado" + usuarioJsonObj.toString());
+                Log.i("USUARIO", "inserirUsuarioBDViaJson: Usuario Encontrado" + usuarioJsonObj.toString());
 
                 Usuario usuarioObj = new Usuario();
                 usuarioObj.setNome(usuarioJsonObj.getString("nome"));
@@ -196,7 +222,7 @@ public class LoginFragment extends Fragment {
 
                 usuarioDAO.add(usuarioObj);
 
-                Log.i("USUARIO", "InserirUsuarioBDViaJson: Usuario Adicionado");
+                Log.i("USUARIO", "inserirUsuarioBDViaJson: Usuario Adicionado");
 
             }
 
@@ -213,7 +239,7 @@ public class LoginFragment extends Fragment {
 
         CadastroFragment cadastroFragment = new CadastroFragment();
 
-        fragmentTransaction.replace(R.id.layout_main,cadastroFragment,cadastroFragment.getClass().getSimpleName());
+        fragmentTransaction.replace(R.id.layout_main, cadastroFragment, cadastroFragment.getClass().getSimpleName());
 
         fragmentTransaction.commit();
     }
@@ -221,7 +247,7 @@ public class LoginFragment extends Fragment {
     //Converte objeto InputStream para String
     private String getStringFromInputStream(InputStream is) {
 
-         BufferedReader br = null;
+        BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
 
         String line;

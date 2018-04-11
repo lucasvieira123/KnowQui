@@ -35,6 +35,7 @@ import model.Resposta;
  */
 
 public class PerguntaFragment extends Fragment {
+
     private TextView textoTipo;
     private TextView textoPrincial;
     private ImageView imagemDaPergunta;
@@ -50,6 +51,7 @@ public class PerguntaFragment extends Fragment {
     List<Pergunta>perguntas;
     Integer indexQuestaoAtual = 0;
     Fragment thisFragment = this;
+    private final Pergunta perguntaAtual;
 
     private TextView ultimoItemSelecionado;
 
@@ -57,7 +59,7 @@ public class PerguntaFragment extends Fragment {
 
     public PerguntaFragment() {
         PerguntaDAO perguntaDAO = PerguntaDAO.getInstance(getActivity());
-        perguntas =  perguntaDAO.list();
+        perguntaAtual = perguntaDAO.getFirst();
 
     }
 
@@ -101,7 +103,7 @@ public class PerguntaFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        Pergunta perguntaAtual = perguntas.get(indexQuestaoAtual);
+
 
         preencherViewComBaseNaPergunta(perguntaAtual);
 
@@ -207,7 +209,7 @@ public class PerguntaFragment extends Fragment {
                     @Override
                     public void run() {
                         if(tempoEmSegundos[0] == 0){
-                            aoEsgotaTempo();
+                            aoEsgotarTempo();
                             cancel();
                         }
 
@@ -237,12 +239,16 @@ public class PerguntaFragment extends Fragment {
         //textoSecundario.setVisibility(View.GONE);
     }
 
-    private void aoEsgotaTempo() {
-        if(indexQuestaoAtual==perguntas.size()-1){
+    private void aoEsgotarTempo() {
+        if(respondeuTodasAsQuestoes()){
             chamarTelaAgradecimento();
         }else {
             carregarNovaPergunta();
         }
+    }
+
+    private boolean respondeuTodasAsQuestoes() {
+        return perguntaAtual == null;
     }
 
     private String stringTempoFormatado(Integer tempoEmSegundos) {

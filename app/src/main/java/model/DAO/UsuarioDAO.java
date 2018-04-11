@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.List;
 
 import model.Historico;
+import model.Pergunta;
 import model.Usuario;
 import utils.DataBaseQueryHelper;
 
@@ -106,7 +107,8 @@ public class UsuarioDAO extends SQLiteOpenHelper implements DAO<Usuario> {
 
     @Override
     public Usuario getFirst() {
-        return null;
+        Cursor cursor = database.rawQuery(dataBaseQueryHelper.getStatementFirst(),null);
+        return (Usuario) dataBaseQueryHelper.getElement(cursor);
     }
 
     @Override
