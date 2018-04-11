@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.example.lucas_vieira.knowqui.R;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -38,7 +36,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 import utils.CarregamentoDialog;
 import utils.GetStringJson;
@@ -50,7 +47,7 @@ public class CadastroFragment extends Fragment {
             editTextSenha,
             editTextConfirmarSenha;
 
-    private TextInputLayout inputConfirmarSenha, inputSenha;
+    private TextInputLayout inputConfirmarSenha, inputSenha, inputNome, inputLogin;
 
     private RadioButton sexoMasculino, sexoFeminino, ensinoPrivado, ensinoPublico;
 
@@ -69,38 +66,20 @@ public class CadastroFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.cadastro_fragment, container, false);
 
-        //TODO retirar tudo o que eu comentei, caso ache necessário
-        /*spinnerEscolaridade = layout.findViewById(R.id.spinnerEscolaridadeId);
-
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getBaseContext()
-                , R.array.tiposDeEscolaridades,
-                android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerEscolaridade.setAdapter(adapter);*/
-
-        botaoSalvar = layout.findViewById(R.id.botaoSalvar);
-        botaoSalvar.setOnClickListener(onClickListenerSalvar());
-
         editTextNome = layout.findViewById(R.id.editTextNomeId);
         editTextLogin = layout.findViewById(R.id.cadastrar_usuario_login);
         editTextSenha = layout.findViewById(R.id.cadastrar_usuario_senha);
+        editTextConfirmarSenha = layout.findViewById(R.id.cadastrar_usuario_confirmar_senha);
 
         inputSenha = layout.findViewById(R.id.cadastrar_usuario_input_layout_senha);
         inputConfirmarSenha = layout.findViewById(R.id.cadastro_usuario_input_layout_confirmar_senha);
+        inputNome = layout.findViewById(R.id.cadastrar_usuario_input_layout_nome);
+        inputLogin = layout.findViewById(R.id.cadastrar_usuario_input_layout_login);
 
         sexoMasculino = layout.findViewById(R.id.cadastrar_usuario_sexo_masc);
         sexoFeminino = layout.findViewById(R.id.cadastrar_usuario_sexo_fem);
         ensinoPrivado = layout.findViewById(R.id.cadastrar_usuario_rede_ensino_privado);
         ensinoPublico = layout.findViewById(R.id.cadastrar_usuario_rede_ensino_publico);
-
-        /*checkBoxPrivado = layout.findViewById(R.id.checkBoxPrivadoId);
-        checkBoxPublico = layout.findViewById(R.id.checkBoxPublicoId);*/
-
-        /*checkBoxPrivado.setOnClickListener(onCheckedChangeListnerPrivado());
-        checkBoxPublico.setOnClickListener(onCheckedChangeListnerPublico());*/
-
 
         botaoSalvar = layout.findViewById(R.id.botaoSalvar);
         botaoSalvar.setOnClickListener(onClickListenerSalvar());
@@ -108,34 +87,21 @@ public class CadastroFragment extends Fragment {
         return layout;
     }
 
-    private View.OnClickListener onCheckedChangeListnerPublico() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        };
-    }
-
-    private View.OnClickListener onCheckedChangeListnerPrivado() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        };
-
-
-    }
-
-
     private View.OnClickListener onClickListenerSalvar() {
         return new View.OnClickListener() {
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View v) {
+
+                if (!validarConfirmacaoSenha()){
+                    return;
+                }
+
+                if (!validarPreenchimentoCampos()){
+                    return;
+                }
+
+
                 final CarregamentoDialog dialog = new CarregamentoDialog(getActivity());
                 dialog.show();
 
@@ -150,8 +116,8 @@ public class CadastroFragment extends Fragment {
 
                         try {
                             cadastroUsuario.put("nome", editTextNome.getText().toString());
-                            cadastroUsuario.put("login", editTextLogin.getText().toString());
-                            cadastroUsuario.put("senha", editTextSenha.getText().toString());
+                            cadastroUsuario.put("login", editTextLogin.getText().toString().toLowerCase().trim());
+                            cadastroUsuario.put("senha", editTextSenha.getText().toString().toLowerCase().trim());
 
                             if (ensinoPublico.isChecked()) {
                                 cadastroUsuario.put("rede_ensino", 0);
@@ -170,17 +136,8 @@ public class CadastroFragment extends Fragment {
                             post.setEntity(entity);
                             response = client.execute(post);
                             Log.i("CADASTRO", "doInBackground: response --->" + response.toString());
-
                             return response;
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (ClientProtocolException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (JSONException | IOException e) {
                             e.printStackTrace();
                         }
                         return null;
@@ -198,42 +155,79 @@ public class CadastroFragment extends Fragment {
                                 String json = GetStringJson.getStringFromInputStream(inputStream);
                                 inputStream.close();
 
-                                if (verificaSeExisteStringDeErro(json)){
-                                    //TODO criar dialog aqui
+                                if (verificaEExibeMensagemError(json)){
                                     return;
                                 }
 
-                                //TODO chamar tela de login aqui
-
-
+                                chamarMenuFragment();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }
                 }.execute();
-
-
-                //todo JP FAZER
-                boolean campoNomeValidado = validarCampoNome();
-                boolean campoIdadeValidada = validarCampoIdade();
-                boolean checkBoxPrivadoValidado = validarCheckBoxPrivado();
-                boolean checkBoxPublicoValidado = validarCheckBoxPublico();
-
-                validarCampoIdade();
-                validarCampoNome();
-
-                validarCheckBoxPublico();
-                validarCheckBoxPrivado();
-
             }
         };
     }
 
+    @SuppressLint("ResourceType")
+    private boolean validarConfirmacaoSenha(){
+        String senha = editTextSenha.getText().toString();
+        String confirmarSenha = editTextConfirmarSenha.getText().toString();
 
-    private boolean verificaSeExisteStringDeErro(String json){
+        if (senha.equals(confirmarSenha)){
+            return true;
+        }else{
+            inputConfirmarSenha.setError("As senhas não conferem!");
+            inputConfirmarSenha.setErrorTextAppearance(R.color.errorMessage);
+            return false;
+        }
+    }
+
+    private boolean validarPreenchimentoCampos(){
+        String nome = editTextNome.getText().toString();
+        String login = editTextLogin.getText().toString();
+        String senha = editTextSenha.getText().toString();
+        String confirmarSenha = editTextConfirmarSenha.getText().toString();
+
+        if (nome.isEmpty() || login.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
+            if (nome.isEmpty()) {
+                inputNome.setError("Campo Obrigatório!");
+            }
+
+            if (login.isEmpty()) {
+                inputLogin.setError("Campo Obrigatório!");
+            }
+
+            if (senha.isEmpty()) {
+                inputSenha.setError("Campo Obrigatório!");
+            }
+
+            if (confirmarSenha.isEmpty()) {
+                inputConfirmarSenha.setError("Campo Obrigatório!");
+            }
+
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
+
+
+    private boolean verificaEExibeMensagemError(String json){
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
+
+            String messagem = jsonObject.getString("message");
+            Toast.makeText(getActivity(), messagem, Toast.LENGTH_SHORT).show();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return json.contains("error");
     }
 
@@ -241,71 +235,20 @@ public class CadastroFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        MenuFragment menuFragment = new MenuFragment();
+        LoginFragment loginFragment = new LoginFragment();
 
-        fragmentTransaction.replace(R.id.layout_main,
-                menuFragment,
-                menuFragment.getClass().getSimpleName());
+        fragmentTransaction.replace(R.id.layout_login,
+                loginFragment,
+                loginFragment.getClass().getSimpleName());
 
         fragmentTransaction.commit();
 
-    }
+        /*MenuFragment menuFragment = new MenuFragment();
+        fragmentTransaction.replace(R.id.layout_main,
+                menuFragment,
+                menuFragment.getClass().getSimpleName());
+        fragmentTransaction.commit();*/
 
-    private boolean validarCampoIdade() {
-
-        if (editTextLogin.getText().toString().equals("")) {
-
-            Toast.makeText(getActivity().getBaseContext(), "Campo Idade Vazio", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-
-            chamarMenuFragment();
-            return true;
-
-        }
-
-    }
-
-    private boolean validarCampoNome() {
-        if (editTextNome.getText().toString().equals("")) {
-            Toast.makeText(getActivity().getBaseContext(), "Campo Nome Vazio", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-
-            chamarMenuFragment();
-            return true;
-
-        }
-    }
-
-    private boolean validarCheckBoxPrivado() {
-
-        /*if (checkBoxPrivado.isChecked()) {
-
-            chamarMenuFragment();
-            return true;
-
-        } else {
-
-            Toast.makeText(getActivity().getBaseContext(), "Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
-            return false;
-
-        }*/
-        return true;
-
-    }
-
-    private boolean validarCheckBoxPublico() {
-        /*if (checkBoxPublico.isChecked()) {
-            chamarMenuFragment();
-            return true;
-
-        } else {
-
-            Toast.makeText(getActivity().getBaseContext(), "Caixa Rede de Ensino Vazia", Toast.LENGTH_SHORT).show();
-            return false;
-        }*/
-        return true;
     }
 
 }
