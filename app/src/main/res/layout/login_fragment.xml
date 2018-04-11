@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+
+    android:orientation="vertical">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-   android:id="@+id/layout_login"
-    tools:context="com.example.lucas_vieira.knowqui.view.LoginFragment">
+    android:id="@+id/layout_login">
 
 
     <android.support.design.widget.TextInputLayout
@@ -26,6 +31,7 @@
             android:id="@+id/edit_text_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:hint="@string/login_hint_edittext_login_fragment" />
 
     </android.support.design.widget.TextInputLayout>
@@ -48,6 +54,8 @@
             android:id="@+id/edit_text_senha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="textPassword"
             android:hint="@string/senha_hint_edittext_login_fragment" />
 
     </android.support.design.widget.TextInputLayout>
@@ -86,3 +94,5 @@
 
 
 </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

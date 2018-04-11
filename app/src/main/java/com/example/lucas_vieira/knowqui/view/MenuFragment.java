@@ -11,31 +11,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lucas_vieira.knowqui.R;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.Scanner;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import custom.RequestAndResponseUrlConst;
 import model.DAO.PerguntaDAO;
 import model.DAO.RespostaDAO;
+import model.DAO.UsuarioDAO;
 import model.Pergunta;
 import model.Resposta;
+import model.Usuario;
 import utils.CarregamentoDialog;
 
 
 public class MenuFragment extends Fragment {
 
     private TextView iniciarJogo;
+    private int contadorDeRequisicoesPosFalha = 0;
 
 
     @Nullable
@@ -72,67 +81,179 @@ public class MenuFragment extends Fragment {
         final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
         carregamentoDialog.show();
 
-        new AsyncTask<Void, Void, Void>() {
+
+
+        new AsyncTask<Void, Void, String>() {
             @Override
-            protected Void doInBackground(Void... voids) {
-                String jsonString = configurandoERequisitando();
-                salvaNoBd(jsonString);
-                return null;
+            protected String doInBackground(Void... voids) {
+                String jsonResponsePergunta = configurandoERequisitando();
+
+                return jsonResponsePergunta;
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
+            protected void onPostExecute(String jsonResponsePergunta) {
                 carregamentoDialog.dismiss();
-                chamarTelaDePergunta();
+                if(jsonResponsePergunta == null || jsonResponsePergunta.isEmpty() || jsonResponsePergunta.equals("")){
+                    Toast.makeText(getActivity().getBaseContext(),
+                            "Problema ao carregar informações de Pergunta. \n Será requisitado Novamente!", Toast.LENGTH_LONG).show();
+                    if(contadorDeRequisicoesPosFalha < 3){
+                        requisitarPerguntasSalvarPerguntasEChamarTelaPerguntas();
+                        contadorDeRequisicoesPosFalha++;
+                    }else {
+                        // foi requisitado mais de 3 vezes
+                        Toast.makeText(getActivity().getBaseContext(),
+                                "Estamos com problemas ao requisitar Perguntas. Por favor, saida do aplicativo e entre novamente!", Toast.LENGTH_LONG).show();
+                    }
+
+
+                }else {
+                    salvaNoBd(jsonResponsePergunta);
+                    chamarTelaDePergunta();
+                    contadorDeRequisicoesPosFalha = 0;
+                }
+
+
             }
         }.execute();
     }
 
     private String configurandoERequisitando() {
 
-        URL url = null;
+        Usuario usuarioLogado = (UsuarioDAO.getInstance(getActivity())).getFirst();
+
+        HttpClient requestPergunta = new DefaultHttpClient();
+        HttpResponse responsePergunta;
+        JSONObject jsonObjectRequestPergunta = new JSONObject();
+        JSONArray jsonArrayRequestPergunta = new JSONArray();
+
+        HttpPost post = new HttpPost(RequestAndResponseUrlConst.LISTA_PERGUNTA);
         try {
-            url = new URL(RequestAndResponseUrlConst.LISTA_PERGUNTA);
-        } catch (MalformedURLException e) {
+            jsonObjectRequestPergunta.put("id_usuario", usuarioLogado.getId());
+            //jsonArrayRequestPergunta.put(jsonObjectRequestPergunta);
+
+
+            //StringEntity entity = new StringEntity(jsonArrayRequestPergunta.toString());
+            StringEntity entity = new StringEntity(jsonObjectRequestPergunta.toString());
+            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(entity);
+            responsePergunta = requestPergunta.execute(post);
+
+            System.out.println("responsePergunta: " + responsePergunta.toString());
+
+            InputStream inputStream = responsePergunta.getEntity().getContent();
+
+            String json = getStringFromInputStream(inputStream);
+            inputStream.close();
+
+            return json;
+
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
-        HttpURLConnection connection = null;
+
+
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("id_usuario",1);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//
+//        JSONArray jsonArray = new JSONArray();
+//        jsonArray.put(jsonObject);
+//
+//        String jsonArrayString = jsonArray.toString();
+//
+//
+//        URL url = null;
+//        try {
+//            url = new URL(RequestAndResponseUrlConst.LISTA_PERGUNTA);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        HttpURLConnection connection = null;
+//        try {
+//            connection = (HttpURLConnection) url.openConnection();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            connection.setRequestMethod("POST");
+//        } catch (ProtocolException e) {
+//            e.printStackTrace();
+//        }
+//        connection.setRequestProperty("Content-type", "application/json;charset=UTF-8");
+//        connection.setRequestProperty("Accept", "application/json");
+//        connection.setDoOutput(true);
+//        connection.setDoInput(true);
+//
+//        connection.setConnectTimeout(180000);
+//        try {
+//            connection.connect();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        DataOutputStream os = null;
+//        try {
+//            os = new DataOutputStream(connection.getOutputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+//        try {
+//            os.writeBytes(jsonArrayString);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Scanner scanner = null;
+//        try {
+//            scanner = new Scanner(url.openStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        StringBuilder resposta = new StringBuilder();
+//
+//        while (scanner.hasNextLine()) {
+//            resposta.append(scanner.nextLine());
+//        }
+//
+//        return resposta.toString();
+
+        return null;
+    }
+
+    private String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
         try {
-            connection = (HttpURLConnection) url.openConnection();
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        try {
-            connection.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        connection.setRequestProperty("Content-type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setDoOutput(true);
-
-        connection.setConnectTimeout(5000);
-        try {
-            connection.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(url.openStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        StringBuilder resposta = new StringBuilder();
-
-        while (scanner.hasNextLine()) {
-            resposta.append(scanner.nextLine());
-        }
-
-        return resposta.toString();
-
+        return sb.toString();
 
     }
 
