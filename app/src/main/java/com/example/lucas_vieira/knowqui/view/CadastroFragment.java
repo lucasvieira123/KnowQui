@@ -9,8 +9,6 @@ import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,6 +106,10 @@ public class CadastroFragment extends Fragment {
                     return;
                 }
 
+                if (validarTamanhoMinimoSenha()){
+                    return;
+                }
+
 
                 final CarregamentoDialog dialog = new CarregamentoDialog(getActivity());
                 dialog.show();
@@ -166,7 +168,7 @@ public class CadastroFragment extends Fragment {
                                     return;
                                 }
 
-                                chamarMenuFragment();
+                                chamaLoginFragment();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -184,12 +186,25 @@ public class CadastroFragment extends Fragment {
         String confirmarSenha = editTextConfirmarSenha.getText().toString();
 
         if (senha.equals(confirmarSenha)){
+            inputConfirmarSenha.setErrorEnabled(false);
             return true;
         }else{
+            inputConfirmarSenha.setErrorEnabled(true);
             inputConfirmarSenha.setError("As senhas não conferem!");
             inputConfirmarSenha.setErrorTextAppearance(R.color.errorMessage);
             return false;
         }
+    }
+
+    private boolean validarTamanhoMinimoSenha(){
+        if (editTextSenha.getText().toString().length() < 6 ){
+            inputSenha.setErrorEnabled(true);
+            inputSenha.setError("A senha deve conter no mínino 6 caracteres!");
+            return true;
+        }
+
+        return false;
+
     }
 
     private boolean validarPreenchimentoCampos(){
@@ -225,7 +240,6 @@ public class CadastroFragment extends Fragment {
         }
     }
 
-
     View.OnFocusChangeListener desabilitarErroInputText = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean b) {
@@ -254,7 +268,7 @@ public class CadastroFragment extends Fragment {
         return json.contains("error");
     }
 
-    private void chamarMenuFragment() {
+    private void chamaLoginFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
