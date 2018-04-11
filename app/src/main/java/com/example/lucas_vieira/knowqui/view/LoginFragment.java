@@ -4,11 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.renderscript.ScriptGroup;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+//import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lucas_vieira.knowqui.R;
-import com.google.gson.JsonObject;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -28,7 +26,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,11 +35,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.concurrent.Callable;
+import java.util.Objects;
 
 import model.DAO.UsuarioDAO;
-import model.Login;
 import model.Usuario;
 import utils.CarregamentoDialog;
 
@@ -123,16 +118,6 @@ public class LoginFragment extends Fragment {
 
                     return response;
 
-                    /*if (response != null){
-                        InputStream inputStream = response.getEntity().getContent();
-
-                        String json = getStringFromInputStream(inputStream);
-                        inputStream.close();
-                        InserirUsuarioBDViaJson(json);
-
-                    }*/
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (ClientProtocolException e) {
@@ -154,6 +139,13 @@ public class LoginFragment extends Fragment {
 
                         String json = getStringFromInputStream(inputStream);
                         inputStream.close();
+
+                        if (verificaSeExisteStringDeErro(json)){
+                            //TODO criar um dialog, pois o toast nao funciona.
+                            Toast.makeText(getActivity(), "Ocorreu um erro: ".concat(pegarMensagemErro(json)), Toast.LENGTH_LONG);
+                            return;
+                        }
+
                         InserirUsuarioBDViaJson(json);
                     }catch (IOException e) {
                         Toast.makeText(getActivity(), "Ocorreu um erro: " + e.getMessage(), Toast.LENGTH_SHORT);
@@ -164,17 +156,32 @@ public class LoginFragment extends Fragment {
             }
 
         }.execute();
+    }
 
+    private boolean verificaSeExisteStringDeErro(String json){
+        return json.contains("error");
+    }
 
+    private String pegarMensagemErro(String json){
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            JSONObject mensagem = new JSONObject(jsonArray.getString(0));
+            return mensagem.getString("message");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void InserirUsuarioBDViaJson(String json) {
         UsuarioDAO usuarioDAO = UsuarioDAO.getInstance(getActivity());
-        try{
+        try {
             JSONArray usuarioJson = new JSONArray(json);
             JSONObject usuarioJsonObj;
 
-            for (int i = 0; i < usuarioJson.length(); i++){
+            for (int i = 0; i < usuarioJson.length(); i++) {
                 usuarioJsonObj = new JSONObject(usuarioJson.getString(i));
 
                 Log.i("USUARIO", "InserirUsuarioBDViaJson: Usuario Encontrado" + usuarioJsonObj.toString());
@@ -193,7 +200,7 @@ public class LoginFragment extends Fragment {
 
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -214,7 +221,7 @@ public class LoginFragment extends Fragment {
     //Converte objeto InputStream para String
     private String getStringFromInputStream(InputStream is) {
 
-        BufferedReader br = null;
+         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
 
         String line;

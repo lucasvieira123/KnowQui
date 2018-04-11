@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="CorBackgroundPadrao">#7ede8b</color>
+    <color name="errorMessage">#FF0000</color>
 
 </resources>
