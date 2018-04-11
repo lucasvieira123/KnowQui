@@ -273,6 +273,15 @@ public class LoginFragment extends Fragment {
         return sb.toString();
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    //    logarBtn.performClick();
+    }
 }
+
+
 
 
