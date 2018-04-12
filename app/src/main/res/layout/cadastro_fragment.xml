@@ -18,7 +18,8 @@
         android:text="@string/dados_cadastrais_textview_cadastro_fragment"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="monospace"/>
 
     <android.support.design.widget.TextInputLayout
         app:errorEnabled="true"
@@ -96,7 +97,8 @@
             android:text="@string/rede_de_ensino_textview_cadastro_fragment"
             android:textColor="@android:color/background_dark"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="monospace"/>
 
 
     <LinearLayout
@@ -136,7 +138,8 @@
         android:text="@string/sexo_textview_cadastro_fragment"
         android:textColor="@android:color/background_dark"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="monospace"/>
 
     <LinearLayout
         android:layout_width="match_parent"
