@@ -21,5 +21,7 @@
     <string name="confirmar_senha">Confirmar Senha</string>
     <string name="sexo_masculino">Masculino</string>
     <string name="sexo_feminino">Feminino</string>
+    <string name="acesso">Acessar</string>
+    <string name="cadastro">Cadastrar</string>
 
 </resources>

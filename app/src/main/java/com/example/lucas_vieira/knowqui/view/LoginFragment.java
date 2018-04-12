@@ -40,6 +40,7 @@ import custom.RequestAndResponseUrlConst;
 import model.DAO.UsuarioDAO;
 import model.Usuario;
 import utils.CarregamentoDialog;
+import utils.GetStringJson;
 
 public class LoginFragment extends Fragment {
 
@@ -136,7 +137,7 @@ public class LoginFragment extends Fragment {
 
                     InputStream inputStream = response.getEntity().getContent();
 
-                    String json = getStringFromInputStream(inputStream);
+                    String json = GetStringJson.getStringFromInputStream(inputStream);
                     inputStream.close();
 
                     return json;
@@ -155,7 +156,7 @@ public class LoginFragment extends Fragment {
                 if (response != null) {
 
                     if (verificaSeExisteStringDeErro(jsonResponse)) {
-                        Toast.makeText(getActivity(), "Ocorreu um erro: "+pegarMensagemErro(jsonResponse), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Ocorreu um erro: " + pegarMensagemErro(jsonResponse), Toast.LENGTH_LONG).show();
                         return;
                     }
 
