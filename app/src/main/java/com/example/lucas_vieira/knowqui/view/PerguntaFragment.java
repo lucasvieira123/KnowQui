@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -18,27 +17,16 @@ import android.widget.Toast;
 import com.example.lucas_vieira.knowqui.R;
 import com.squareup.picasso.Picasso;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import custom.LetraDoItem;
 import custom.RequestAndResponseUrlConst;
 import model.DAO.PerguntaDAO;
 import model.DAO.RespostaDAO;
@@ -46,7 +34,9 @@ import model.DAO.UsuarioDAO;
 import model.Pergunta;
 import model.Resposta;
 import model.Usuario;
-import utils.CarregamentoDialog;
+import utils.AsynctaskWithProgress;
+import utils.RequestAndResponseHelper;
+import utils.WaitStopLogicOnTextView;
 
 /**
  * Created by lucas-vieira on 09/03/18.
@@ -62,13 +52,13 @@ public class PerguntaFragment extends Fragment {
     private TextView itemB;
     private TextView itemC;
     private TextView itemD;
-    private ImageView imagemPular;
-    private ImageView imagemValidar;
     private TextView cronometro;
-    Fragment thisFragment = this;
+    private Fragment thisFragment = this;
     private Pergunta perguntaAtual;
-    private int contadorDeRequisicoesPosFalha = 0;
+
     private TextView ultimoItemSelecionado;
+    private LetraDoItem letraSelecionada;
+    private LetraDoItem letraDoItemCorreto;
 
 
     @Override
@@ -97,10 +87,10 @@ public class PerguntaFragment extends Fragment {
         itemD = layout.findViewById(R.id.item_d);
         itemD.setOnClickListener(onClickListenerItens());
 
-        imagemPular = layout.findViewById(R.id.pular_imageView);
+        ImageView imagemPular = layout.findViewById(R.id.pular_imageView);
         imagemPular.setOnClickListener(onClickListenerPularOuValidar());
 
-        imagemValidar = layout.findViewById(R.id.validar_imageView);
+        ImageView imagemValidar = layout.findViewById(R.id.validar_imageView);
         imagemValidar.setOnClickListener(onClickListenerPularOuValidar());
 
         return layout;
@@ -109,305 +99,125 @@ public class PerguntaFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        requisitarPerguntaSalvarPerguntaEPreencherAView();
+
+        requisitarPerguntaComSuasRespostasLimparBdESalvarBdEPreencherAView();
+
 
 
     }
 
-    private void preencherViewComBaseNaPergunta(Pergunta perguntaAtual) {
-       RespostaDAO respostaDAO = RespostaDAO.getInstance(getActivity());
+    @SuppressLint("StaticFieldLeak")
+    private void requisitarPerguntaComSuasRespostasLimparBdESalvarBdEPreencherAView() {
+        final RequestAndResponseHelper perguntaComSuasRespostasReqAndRespHelper = new RequestAndResponseHelper();
+        final String jsonPergunta = construirJsonPergunta();
+        new AsynctaskWithProgress<String, Void, String>(getActivity()) {
+            @Override
+            public String doInBackgroundCustom(String[] uri) throws Exception {
+                String jsonComPerguntaESuasRespostas = perguntaComSuasRespostasReqAndRespHelper.setUri(uri[0]).setJsonRequestString(jsonPergunta).getJson();
+                return jsonComPerguntaESuasRespostas;
+            }
+
+            @Override
+            public void onPostExecuteCustom(String JsonStringPerguntaComSuasRespostas) {
+                if(JsonStringPerguntaComSuasRespostas.contains("error")){
+                    chamarTelaAgradecimento();
+                    return;
+                }
+
+                criarPerguntaComSuasRespostasLimparBDESalvarBD(JsonStringPerguntaComSuasRespostas);
+
+                perguntaAtual = (PerguntaDAO.getInstance(getActivity())).getFirst();
+                letraDoItemCorreto = getLetraDoItemCorreto();
+
+                preencherViewComBaseNaPerguntaAtual();
+            }
+
+            public void onExceptionInBackGround(Exception e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }.execute(RequestAndResponseUrlConst.LISTA_PERGUNTA);
+    }
+
+    private LetraDoItem getLetraDoItemCorreto() {
+        Resposta resposta = (RespostaDAO.getInstance(getActivity())).get("id_pergunta = %s and ehCorreta = %s", String.valueOf(perguntaAtual.getId()), "1");
+        switch (resposta.getLetra()) {
+            case "A":
+                return LetraDoItem.levraA;
+            case "B":
+                return LetraDoItem.levraB;
+
+            case "C":
+                return LetraDoItem.levraC;
+
+            case "D":
+                return LetraDoItem.levraD;
+
+        }
+        return null;
+    }
+
+    private void preencherViewComBaseNaPerguntaAtual() {
+
+        RespostaDAO respostaDAO = RespostaDAO.getInstance(getActivity());
         List<Resposta> respostasDaQuestaoAtual = respostaDAO.list("id_pergunta = %s", String.valueOf(perguntaAtual.getId()));
 
 
-
-       textoTipo.setText(perguntaAtual.getTipo());
-       textoPrincial.setText(perguntaAtual.getDescricao());
-
-
-       if(perguntaAtual.getComplemento() != null){
-           textoSecundario.setVisibility(View.VISIBLE);
-           textoSecundario.setText(perguntaAtual.getComplemento());
-       }else {
-           textoSecundario.setVisibility(View.GONE);
-       }
-
-       if(perguntaAtual.getDiretorioImagem() != null && perguntaAtual.getImagem()!= null){
-
-           String imagemUrlString = perguntaAtual.getDiretorioImagem().concat(perguntaAtual.getImagem());
-
-           try {
-               URL imagemUrl = new URL(imagemUrlString);
-               Picasso.get().load(imagemUrl.toString()).fit().into(imagemDaPergunta);
-           } catch (MalformedURLException e) {
-               Toast.makeText(getActivity(),"Problema ao carregar imagem", Toast.LENGTH_SHORT).show();
-           }
+        textoTipo.setText(perguntaAtual.getTipo());
+        textoPrincial.setText(perguntaAtual.getDescricao());
 
 
-           imagemDaPergunta.setVisibility(View.VISIBLE);
+        if (perguntaAtual.getComplemento() != null) {
+            textoSecundario.setVisibility(View.VISIBLE);
+            textoSecundario.setText(perguntaAtual.getComplemento());
+        } else {
+            textoSecundario.setVisibility(View.GONE);
+        }
 
-       }else {
-           imagemDaPergunta.setVisibility(View.GONE);
-       }
+        if (perguntaAtual.getDiretorioImagem() != null && perguntaAtual.getImagem() != null) {
+
+            String imagemUrlString = perguntaAtual.getDiretorioImagem().concat(perguntaAtual.getImagem());
+
+            try {
+                URL imagemUrl = new URL(imagemUrlString);
+                Picasso.get().load(imagemUrl.toString()).fit().into(imagemDaPergunta);
+            } catch (MalformedURLException e) {
+                Toast.makeText(getActivity(), "Problema ao carregar imagem", Toast.LENGTH_SHORT).show();
+            }
+
+
+            imagemDaPergunta.setVisibility(View.VISIBLE);
+
+        } else {
+            imagemDaPergunta.setVisibility(View.GONE);
+        }
 
         itemA.setText(respostasDaQuestaoAtual.get(0).getDescricao());
         itemB.setText(respostasDaQuestaoAtual.get(1).getDescricao());
         itemC.setText(respostasDaQuestaoAtual.get(2).getDescricao());
         itemD.setText(respostasDaQuestaoAtual.get(3).getDescricao());
-        Integer tempoEmMinutos = perguntaAtual.getTempo();
 
-        final Integer[] tempoEmSegundos = {tempoEmMinutos * 60};
+        int tempoEmMinutos = perguntaAtual.getTempo();
 
-        Timer timer = new Timer();
-        try{
-        timer.scheduleAtFixedRate(new TimerTask() {
+        new WaitStopLogicOnTextView(getActivity(),cronometro,tempoEmMinutos) {
             @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable(){
-                    @Override
-                    public void run() {
-                        if(tempoEmSegundos[0] == 0){
-                            aoEsgotarTempo();
-                            cancel();
-                        }
-
-                       cronometro.setText(String.valueOf(stringTempoFormatado(tempoEmSegundos[0])));
-                        tempoEmSegundos[0]--;
-
-                    }
-                });
+            protected void aoEsgotarTempo() {
+                enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
 
             }
-        },0,1000);}catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-    }
-
-    private void aoEsgotarTempo() {
-        if(respondeuTodasAsQuestoes()){
-            chamarTelaAgradecimento();
-        }else {
-            carregarNovaPergunta();
-        }
-    }
-
-    private boolean respondeuTodasAsQuestoes() {
-        return perguntaAtual == null;
-    }
-
-    private String stringTempoFormatado(Integer tempoEmSegundos) {
-        String minuto = String.valueOf(tempoEmSegundos/60);
-        String segundos = String.format("%02d",tempoEmSegundos%60);
-
-
-        return minuto+":"+segundos;
+        }.start();
     }
 
 
-    private View.OnClickListener onClickListenerPularOuValidar() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.pular_imageView:
-                        //Toast.makeText(getActivity().getBaseContext(), "Pulado", Toast.LENGTH_SHORT).show();
-                        if(perguntaAtual==null){
-                            chamarTelaAgradecimento();
-                        }else {
-                            carregarNovaPergunta();
-                        }
-                        break;
 
-                    case R.id.validar_imageView:
-                        if(perguntaAtual==null){
-                            chamarTelaAgradecimento();
-                        }else {
-                            carregarNovaPergunta();
-                        }
-
-                        break;
-                }
-            }
-        };
-    }
-
-    private void chamarTelaAgradecimento() {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AgradecimentoFragment agradecimentoFragment = new AgradecimentoFragment();
-
-        fragmentTransaction.replace(R.id.pergunta_layout_id,
-                agradecimentoFragment,
-                agradecimentoFragment.getClass().getSimpleName());
-
-        fragmentTransaction.commit();
-    }
-
-    private void carregarNovaPergunta() {
-        getActivity().getFragmentManager()
-                .beginTransaction()
-                .detach(thisFragment)
-                .attach(thisFragment)
-                .commit();
-    }
-
-    private View.OnClickListener onClickListenerItens() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                switch (v.getId()) {
-                    case R.id.item_a:
-                        Toast.makeText(getActivity().getBaseContext(), "A", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.item_b:
-                        Toast.makeText(getActivity().getBaseContext(), "B", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.item_c:
-                        Toast.makeText(getActivity().getBaseContext(), "C", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.item_d:
-                        Toast.makeText(getActivity().getBaseContext(), "D", Toast.LENGTH_SHORT).show();
-                        break;
-
-
-                }
-
-                if(!v.isSelected()){
-                    v.setSelected(true);
-                    if(ultimoItemSelecionado != null){
-                        ultimoItemSelecionado.setSelected(false);
-                    }
-                    ultimoItemSelecionado = (TextView) v;
-
-                }else {
-                    v.setSelected(false);
-                }
-
-            }
-        };
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void requisitarPerguntaSalvarPerguntaEPreencherAView() {
-        final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
-        carregamentoDialog.show();
-
-
-
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... voids) {
-                String jsonResponsePergunta = configurandoERequisitando();
-
-                return jsonResponsePergunta;
-            }
-
-            @Override
-            protected void onPostExecute(String jsonResponsePergunta) {
-                carregamentoDialog.dismiss();
-                if(jsonResponsePergunta == null || jsonResponsePergunta.isEmpty() || jsonResponsePergunta.equals("")){
-                    Toast.makeText(getActivity().getBaseContext(),
-                            "Problema ao carregar informações de Pergunta. \n Será requisitado Novamente!", Toast.LENGTH_LONG).show();
-                    if(contadorDeRequisicoesPosFalha < 3){
-                        requisitarPerguntaSalvarPerguntaEPreencherAView();
-                        contadorDeRequisicoesPosFalha++;
-                    }else {
-                        // foi requisitado mais de 3 vezes
-                        Toast.makeText(getActivity().getBaseContext(),
-                                "Estamos com problemas ao requisitar Perguntas. Por favor, saida do aplicativo e entre novamente!", Toast.LENGTH_LONG).show();
-                    }
-
-
-                }else {
-                    salvaNoBd(jsonResponsePergunta);
-                    contadorDeRequisicoesPosFalha = 0;
-                }
-
-                PerguntaDAO perguntaDAO = PerguntaDAO.getInstance(getActivity());
-                perguntaAtual = perguntaDAO.getFirst();
-
-                preencherViewComBaseNaPergunta(perguntaAtual);
-
-
-            }
-        }.execute();
-    }
-
-    private String configurandoERequisitando() {
-
-        Usuario usuarioLogado = (UsuarioDAO.getInstance(getActivity())).getFirst();
-
-        HttpClient requestPergunta = new DefaultHttpClient();
-        HttpResponse responsePergunta;
-        JSONObject jsonObjectRequestPergunta = new JSONObject();
-
-        HttpPost post = new HttpPost(RequestAndResponseUrlConst.LISTA_PERGUNTA);
-        try {
-            jsonObjectRequestPergunta.put("id_usuario", usuarioLogado.getId());
-
-            StringEntity entity = new StringEntity(jsonObjectRequestPergunta.toString());
-            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            post.setEntity(entity);
-            responsePergunta = requestPergunta.execute(post);
-
-            System.out.println("responsePergunta: " + responsePergunta.toString());
-
-            InputStream inputStream = responsePergunta.getEntity().getContent();
-
-            String json = getStringFromInputStream(inputStream);
-            inputStream.close();
-
-            return json;
-
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return null;
-    }
-
-    private String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-
-    }
-
-    private void salvaNoBd(String jsonString) {
+    private void criarPerguntaComSuasRespostasLimparBDESalvarBD(String jsonStringPerguntaComSuasRespostas) {
         RespostaDAO respostaDAO = RespostaDAO.getInstance(getActivity());
+        respostaDAO.removeAll();
         PerguntaDAO perguntaDAO = PerguntaDAO.getInstance(getActivity());
+        perguntaDAO.removeAll();
 
         JSONArray jsonArrayPerguntas = null;
         try {
-            jsonArrayPerguntas = new JSONArray(jsonString);
+            jsonArrayPerguntas = new JSONArray(jsonStringPerguntaComSuasRespostas);
 
 
             for (int i = 0; i < jsonArrayPerguntas.length(); i++) {
@@ -467,6 +277,207 @@ public class PerguntaFragment extends Fragment {
         }
 
 
+    }
+
+    private View.OnClickListener onClickListenerPularOuValidar() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.validar_imageView:
+                        if(existeItemSelecionado()){
+                            enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
+                        }else {
+                            Toast.makeText(getActivity(),"Nenhum item selecionado",Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+
+                    case R.id.pular_imageView:
+                        enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
+                        break;
+
+
+                }
+            }
+        };
+    }
+
+    private boolean existeItemSelecionado() {
+        return letraSelecionada != null;
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela() {
+
+        final boolean itemEstaCorretoBoolean = estaCorreto(letraSelecionada);
+        final int itemEstaCorretoInt = itemEstaCorretoBoolean ? 1:0;
+        final RequestAndResponseHelper respostaReqAndRespHelper = new RequestAndResponseHelper();
+
+        new AsynctaskWithProgress<String, Void, String>(getActivity()) {
+            @Override
+            public String doInBackgroundCustom(String[] uri) throws Exception {
+                String jsonRequestResposta = construirJsonResposta(itemEstaCorretoInt);
+                String jsonResponseResposta = respostaReqAndRespHelper
+                        .setUri(uri[0])
+                        .setJsonRequestString(jsonRequestResposta)
+                        .getJson();
+                return jsonResponseResposta;
+
+            }
+
+            @Override
+            public void onPostExecuteCustom(String jsonResponseResposta) {
+                if(jsonResponseResposta.contains("sucess")){
+                    Toast.makeText(getActivity(),"Enviado com sucesso",Toast.LENGTH_SHORT).show();
+                    carregarNovaPerguntaEAtualizarTela();
+                }else {
+                    Toast.makeText(getActivity(),"Problema ao enviar resposta",Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onExceptionInBackGround(Exception e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }.execute(RequestAndResponseUrlConst.RESPONDER);
+
+    }
+
+
+    public String construirJsonResposta(int itemEstaCorretoInt) {
+        Usuario usuarioLogado = (UsuarioDAO.getInstance(getActivity())).getFirst();
+
+        JSONObject jsonRespostaRequest = new JSONObject();
+
+        try {
+
+            jsonRespostaRequest.put("id_pergunta", perguntaAtual.getId());
+            jsonRespostaRequest.put("id_usuario", usuarioLogado.getId());
+            jsonRespostaRequest.put("acertou", itemEstaCorretoInt);
+            jsonRespostaRequest.put("data", getDataAtual());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonRespostaRequest.toString();
+    }
+
+    private String getDataAtual() {
+        String data = "dd/MM/yyyy";
+
+        String dataAtual;
+        java.util.Date agora = new java.util.Date();
+        SimpleDateFormat formata = new SimpleDateFormat(data);
+        dataAtual = formata.format(agora);
+        return dataAtual;
+    }
+
+    public String construirJsonPergunta(){
+
+        Usuario usuarioLogado = (UsuarioDAO.getInstance(getActivity())).getFirst();
+        JSONObject jsonObjectRequestPergunta = new JSONObject();
+
+        try {
+            jsonObjectRequestPergunta.put("id_usuario", usuarioLogado.getId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObjectRequestPergunta.toString();
+
+    }
+
+
+    private boolean estaCorreto(LetraDoItem letraDoItemSelecionado) {
+
+        if(letraDoItemSelecionado == null){
+            return false;
+        }else {
+            return letraDoItemSelecionado.equals(letraDoItemCorreto);
+        }
+
+    }
+
+
+    private void chamarTelaAgradecimento() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AgradecimentoFragment agradecimentoFragment = new AgradecimentoFragment();
+
+        fragmentTransaction.replace(R.id.pergunta_layout_id,
+                agradecimentoFragment,
+                agradecimentoFragment.getClass().getSimpleName());
+
+        fragmentTransaction.commit();
+    }
+
+    private void carregarNovaPerguntaEAtualizarTela() {
+        getActivity().getFragmentManager()
+                .beginTransaction()
+                .detach(thisFragment)
+                .attach(thisFragment)
+                .commit();
+    }
+
+    private View.OnClickListener onClickListenerItens() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (v.getId()) {
+                    case R.id.item_a:
+                        if (!itemA.isSelected()) {
+                            letraSelecionada = LetraDoItem.levraA;
+                        }else {
+                            letraSelecionada = null;
+                        }
+                        break;
+
+                    case R.id.item_b:
+                        if (!itemB.isSelected()) {
+                            letraSelecionada = LetraDoItem.levraB;
+                        }else {
+                            letraSelecionada = null;
+                        }
+                        break;
+
+                    case R.id.item_c:
+                        if (!itemC.isSelected()) {
+                            letraSelecionada = LetraDoItem.levraC;
+                        }else {
+                            letraSelecionada = null;
+                        }
+                        break;
+
+                    case R.id.item_d:
+                        if (!itemD.isSelected()) {
+                            letraSelecionada = LetraDoItem.levraD;
+                        }else {
+                            letraSelecionada = null;
+                        }
+                        break;
+                }
+
+              coloreItemSelecionado(v);
+
+            }
+        };
+    }
+
+    private void coloreItemSelecionado(View v) {
+        if (!v.isSelected()) {
+            v.setSelected(true);
+            if (ultimoItemSelecionado != null) {
+                ultimoItemSelecionado.setSelected(false);
+            }
+            ultimoItemSelecionado = (TextView) v;
+
+        } else {
+            v.setSelected(false);
+        }
     }
 
 

@@ -70,6 +70,6 @@ public class MenuFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-       // iniciarJogo.performClick();
+        iniciarJogo.performClick();
     }
 }

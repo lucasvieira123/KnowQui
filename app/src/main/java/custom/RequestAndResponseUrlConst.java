@@ -8,5 +8,6 @@ public final class RequestAndResponseUrlConst {
 
     public final static String LISTA_PERGUNTA = "http://knowqui.com.br/listapergunta";
     public final static String LOGAR = "http://knowqui.com.br/logar";
+    public final static String RESPONDER = "http://knowqui.com.br/responder";
 
 }

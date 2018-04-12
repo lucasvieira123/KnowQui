@@ -44,7 +44,7 @@ public class PerguntaDAO extends SQLiteOpenHelper implements DAO<Pergunta> {
                 "( " +
                 "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 " `descricao` TEXT NOT NULL," +
-                " `complemento` TEXT NOT NULL," +
+                " `complemento` TEXT," +
                 " `imagem` TEXT ," +
                 " `diretorioImagem` TEXT ," +
                 " `nivel` TEXT NOT NULL," +

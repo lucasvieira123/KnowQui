@@ -1,5 +1,7 @@
 package utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.DrawableRes;
 
@@ -9,36 +11,47 @@ import com.example.lucas_vieira.knowqui.R;
  * Created by lucas-vieira on 04/04/18.
  */
 
-public class AsynctaskWithProgress<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+public abstract class AsynctaskWithProgress<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+    Activity activity;
+    CarregamentoDialog carregamentoDialog;
 
-    //todo proximo passo eh deixar o programador colocar seu layout perssonalizado
-   // private Integer custonLayout;
-
-    @DrawableRes
-    int progressIcone;
-
-    public AsynctaskWithProgress(@DrawableRes int progressIcone) {
-        this.progressIcone = progressIcone;
+    public AsynctaskWithProgress(Activity activity) {
+        carregamentoDialog = new CarregamentoDialog(activity);
+        this.activity = activity;
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+    public Result doInBackground(Params[] params) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                carregamentoDialog.show();
+            }
+        });
 
-    }
+        try {
+            return doInBackgroundCustom(params);
+        }catch (final Exception e){
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onExceptionInBackGround(e);
+                }
+            });
 
-    @Override
-    protected void onProgressUpdate(Progress[] values) {
-        super.onProgressUpdate(values);
-    }
+        }
 
-    @Override
-    protected Result doInBackground(Params[] params) {
         return null;
+
     }
 
     @Override
-    protected void onPostExecute(Result result) {
-        super.onPostExecute(result);
+    public void onPostExecute(Result result) {
+        carregamentoDialog.dismiss();
+        onPostExecuteCustom(result);
     }
+
+    public abstract Result doInBackgroundCustom(Params[] params) throws Exception;
+    public abstract void onPostExecuteCustom(Result result);
+    public abstract void onExceptionInBackGround (Exception e);
 }

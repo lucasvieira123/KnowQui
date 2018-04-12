@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
 import utils.CarregamentoDialog;
 import utils.GetStringJson;
@@ -106,7 +107,11 @@ public class CadastroFragment extends Fragment {
                     return;
                 }
 
-                if (validarTamanhoMinimoSenha()){
+                if (validarTamanhoMinimoLoginESenha()){
+                    return;
+                }
+
+                if(validarAcentuacaoEmNomeLoginESenha()){
                     return;
                 }
 
@@ -167,6 +172,7 @@ public class CadastroFragment extends Fragment {
                                 if (verificaEExibeMensagemError(json)){
                                     return;
                                 }
+                                Toast.makeText(getActivity(),"Cadastrado com sucesso!",Toast.LENGTH_SHORT).show();
 
                                 chamaLoginFragment();
 
@@ -178,6 +184,25 @@ public class CadastroFragment extends Fragment {
                 }.execute();
             }
         };
+    }
+
+    private boolean validarAcentuacaoEmNomeLoginESenha() {
+        String nome = editTextNome.getText().toString();
+        String login = editTextLogin.getText().toString();
+        String senha = editTextSenha.getText().toString();
+
+        boolean nomeContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", nome);
+        boolean loginContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", login);
+        boolean senhaContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", senha);
+
+        if(loginContemAcento || senhaContemAcento || nomeContemAcento){
+            Toast.makeText(getActivity(),"Os campos Nome, Login ou Senha não devem ter acentuação!",Toast.LENGTH_LONG).show();
+        }
+
+        return loginContemAcento || senhaContemAcento || nomeContemAcento;
+
+
+
     }
 
     @SuppressLint("ResourceType")
@@ -196,10 +221,17 @@ public class CadastroFragment extends Fragment {
         }
     }
 
-    private boolean validarTamanhoMinimoSenha(){
-        if (editTextSenha.getText().toString().length() < 6 ){
+    private boolean validarTamanhoMinimoLoginESenha(){
+        if(editTextLogin.getText().toString().length() < 4){
+            inputLogin.setErrorEnabled(true);
+            inputLogin.setError("A Login deve conter no mínino 4 caracteres!");
+            return true;
+        }
+
+        if (editTextSenha.getText().toString().length() < 4 ){
             inputSenha.setErrorEnabled(true);
-            inputSenha.setError("A senha deve conter no mínino 6 caracteres!");
+            inputSenha.setError("A Senha deve conter no mínino 4 caracteres!");
+
             return true;
         }
 
@@ -274,17 +306,12 @@ public class CadastroFragment extends Fragment {
 
         LoginFragment loginFragment = new LoginFragment();
 
-        fragmentTransaction.replace(R.id.layout_login,
+        fragmentTransaction.replace(R.id.layout_main,
                 loginFragment,
                 loginFragment.getClass().getSimpleName());
 
         fragmentTransaction.commit();
 
-        /*MenuFragment menuFragment = new MenuFragment();
-        fragmentTransaction.replace(R.id.layout_main,
-                menuFragment,
-                menuFragment.getClass().getSimpleName());
-        fragmentTransaction.commit();*/
 
     }
 

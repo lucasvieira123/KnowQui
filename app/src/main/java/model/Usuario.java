@@ -36,11 +36,11 @@ public class Usuario extends Bean{
         this.senha = senha;
     }
 
-    public int getRede_ensino() {
+    public Integer getRede_ensino() {
         return rede_ensino;
     }
 
-    public void setRede_ensino(int rede_ensino) {
+    public void setRede_ensino(Integer rede_ensino) {
         this.rede_ensino = rede_ensino;
     }
 

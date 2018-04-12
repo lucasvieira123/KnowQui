@@ -76,8 +76,8 @@ public class LoginFragment extends Fragment {
 
         senha = senhaEdtTxt.getText().toString();
 
-        loginEdtTxt.setText("joao1");
-        senhaEdtTxt.setText("1234");
+//        loginEdtTxt.setText("joao1");
+//        senhaEdtTxt.setText("1234");
     }
 
     private View.OnClickListener onClickListener() {
@@ -274,12 +274,6 @@ public class LoginFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    //    logarBtn.performClick();
-    }
 }
 
 

@@ -30,6 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTextNomeId"
+            android:inputType="text"
+            android:maxLines="1"
             android:hint="@string/nome_hint_edittext_cadastro_fragment"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -45,7 +47,10 @@
             android:id="@+id/cadastrar_usuario_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"
             android:hint="@string/login_hint_edittext_login_fragment"/>
+
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -60,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/senha_hint_edittext_login_fragment"
+            android:maxLines="1"
             android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -76,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/confirmar_senha"
+            android:maxLines="1"
             android:inputType="textPassword"/>
 
 
