@@ -286,8 +286,11 @@ public class CadastroFragment extends Fragment {
             JSONArray jsonArray = new JSONArray(json);
             JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
 
-            String messagem = jsonObject.getString("message");
-            Toast.makeText(getActivity(), messagem, Toast.LENGTH_SHORT).show();
+            if(jsonObject.toString().contains("message")){
+                String messagem = jsonObject.getString("message");
+                Toast.makeText(getActivity(), messagem, Toast.LENGTH_SHORT).show();
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -305,7 +308,7 @@ public class CadastroFragment extends Fragment {
                 loginFragment,
                 loginFragment.getClass().getSimpleName());
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
 
     }

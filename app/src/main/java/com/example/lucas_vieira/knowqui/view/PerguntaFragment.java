@@ -202,7 +202,7 @@ public class PerguntaFragment extends Fragment {
        waitStopLogicOnTextView =  new WaitStopLogicOnTextView(getActivity(),cronometro,tempoEmMinutos) {
             @Override
             protected void aoEsgotarTempo() {
-                enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
+                enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela(false);
 
             }
         }.start();
@@ -281,13 +281,15 @@ public class PerguntaFragment extends Fragment {
     }
 
     private View.OnClickListener onClickListenerPularOuValidar() {
+        final boolean[] selecioandoPularPergunta = {true};
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.validar_imageView:
+                        selecioandoPularPergunta[0] = false;
                         if(existeItemSelecionado()){
-                            enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
+                            enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela(selecioandoPularPergunta[0]);
                         }else {
                             Toast.makeText(getActivity(),"Nenhum item selecionado",Toast.LENGTH_SHORT).show();
                         }
@@ -295,7 +297,7 @@ public class PerguntaFragment extends Fragment {
                         break;
 
                     case R.id.pular_imageView:
-                        enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
+                        enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela(selecioandoPularPergunta[0]);
                         break;
 
 
@@ -309,11 +311,21 @@ public class PerguntaFragment extends Fragment {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela() {
-
-        final boolean itemEstaCorretoBoolean = estaCorreto(letraSelecionada);
-        final int itemEstaCorretoInt = itemEstaCorretoBoolean ? 1:0;
+    private void enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela(boolean foiPuladaAPergunta) {
+        final Integer itemEstaCorretoInt;
+        final Boolean itemEstaCorretoBoolean;
         final RequestAndResponseHelper respostaReqAndRespHelper = new RequestAndResponseHelper();
+
+        if(foiPuladaAPergunta){
+            itemEstaCorretoInt = 0;
+        }else {
+
+            itemEstaCorretoBoolean = estaCorreto(letraSelecionada);
+            itemEstaCorretoInt = itemEstaCorretoBoolean ? 1:0;
+
+        }
+
+
 
         new AsynctaskWithProgress<String, Void, String>(getActivity()) {
             @Override
@@ -405,7 +417,11 @@ public class PerguntaFragment extends Fragment {
 
     private void chamarTelaAgradecimento() {
 
-        waitStopLogicOnTextView.stop();
+
+        if(waitStopLogicOnTextView != null){
+            waitStopLogicOnTextView.stop();
+        }
+
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -415,19 +431,21 @@ public class PerguntaFragment extends Fragment {
                 agradecimentoFragment,
                 agradecimentoFragment.getClass().getSimpleName());
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
     }
 
     private void carregarNovaPerguntaEAtualizarTela() {
 
         waitStopLogicOnTextView.stop();
+        letraDoItemCorreto = null;
+        letraSelecionada = null;
 
         getActivity().getFragmentManager()
                 .beginTransaction()
                 .detach(thisFragment)
                 .attach(thisFragment)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     private View.OnClickListener onClickListenerItens() {

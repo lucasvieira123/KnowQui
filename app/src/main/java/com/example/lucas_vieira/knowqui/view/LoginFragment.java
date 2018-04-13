@@ -78,8 +78,8 @@ public class LoginFragment extends Fragment {
 
         senha = senhaEdtTxt.getText().toString();
 
-//        loginEdtTxt.setText("joao1");
-//        senhaEdtTxt.setText("1234");
+        loginEdtTxt.setText("valeria");
+        senhaEdtTxt.setText("valeria");
     }
 
     private View.OnClickListener onClickListener() {
@@ -183,7 +183,7 @@ public class LoginFragment extends Fragment {
 
         fragmentTransaction.replace(R.id.layout_main, menuFragment, menuFragment.getClass().getSimpleName());
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     private boolean verificaSeExisteStringDeErro(String json) {
@@ -243,7 +243,7 @@ public class LoginFragment extends Fragment {
 
         fragmentTransaction.replace(R.id.layout_main, cadastroFragment, cadastroFragment.getClass().getSimpleName());
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     //Converte objeto InputStream para String

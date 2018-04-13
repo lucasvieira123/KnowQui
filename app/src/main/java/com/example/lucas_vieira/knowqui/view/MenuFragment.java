@@ -64,12 +64,12 @@ public class MenuFragment extends Fragment {
                 perguntaFragment,
                 perguntaFragment.getClass().getSimpleName());
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        iniciarJogo.performClick();
+
     }
 }
