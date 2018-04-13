@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         LoginFragment loginFragment = new LoginFragment();
         fragmentTransaction.replace(R.id.layout_main, loginFragment, loginFragment.getClass().getSimpleName());
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
 
     }
 

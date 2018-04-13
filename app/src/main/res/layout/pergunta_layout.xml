@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-
     android:orientation="vertical">
 
 
@@ -21,11 +20,13 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="3dp"
-            android:text="HOLDER-TIPO"
+            android:textSize="18sp"
+            android:text="Tipo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="monospace"/>
 
         <TextView
             android:id="@+id/texto_princial"
@@ -34,11 +35,13 @@
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="16dp"
-            android:text="TEXTO-PRINCIPAL-HOLDER"
+            android:text="Texto Principal"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/texto_tipo" />
+            app:layout_constraintTop_toBottomOf="@+id/texto_tipo"
+            android:fontFamily="monospace"/>
 
         <ImageView
             android:id="@+id/imagem"
@@ -59,11 +62,13 @@
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
-            android:text="-TEXTO-SECUNDARIO-HOLDER"
+            android:text="Texto Secundário"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagem" />
+            app:layout_constraintTop_toBottomOf="@+id/imagem"
+            android:fontFamily="monospace"/>
 
         <ImageView
             android:id="@+id/pular_imageView"
@@ -105,6 +110,7 @@
             android:layout_height="wrap_content"
             android:inputType="datetime"
             android:text="00:00"
+            android:textSize="18sp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -112,7 +118,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_d" />
+            app:layout_constraintTop_toBottomOf="@+id/item_d"
+            android:fontFamily="monospace"/>
 
         <TextView
             android:id="@+id/item_b"
@@ -125,11 +132,13 @@
             android:clickable="true"
             android:enabled="true"
             android:focusable="true"
-            android:text="-TEXTO-ITEM-B-HOLDER"
+            android:text="Item b"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_a" />
+            app:layout_constraintTop_toBottomOf="@+id/item_a"
+            android:fontFamily="monospace"/>
 
         <TextView
             android:id="@+id/item_a"
@@ -142,11 +151,13 @@
             android:clickable="true"
             android:enabled="true"
             android:focusable="true"
-            android:text="-TEXTO-ITEM-A-HOLDER"
+            android:text="Item a"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/texto_secundario" />
+            app:layout_constraintTop_toBottomOf="@+id/texto_secundario"
+            android:fontFamily="monospace"/>
 
 
         <TextView
@@ -160,11 +171,13 @@
             android:clickable="true"
             android:enabled="true"
             android:focusable="true"
-            android:text="-TEXTO-ITEM-D-HOLDER"
+            android:text="Item d"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_c" />
+            app:layout_constraintTop_toBottomOf="@+id/item_c"
+            android:fontFamily="monospace"/>
 
         <TextView
             android:id="@+id/item_c"
@@ -177,7 +190,9 @@
             android:clickable="true"
             android:enabled="true"
             android:focusable="true"
-            android:text="-TEXTO-ITEM-C-HOLDER"
+            android:textSize="18sp"
+            android:text="Item c"
+            android:fontFamily="monospace"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

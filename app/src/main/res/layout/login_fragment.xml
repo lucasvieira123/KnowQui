@@ -8,6 +8,7 @@
     android:background="@color/background_login"
     android:fillViewport="true"
     android:orientation="vertical">
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -120,7 +121,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
         android:text="@string/cadastro"
