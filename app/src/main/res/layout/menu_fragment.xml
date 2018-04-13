@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tela_inicial_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/CorBackgroundPadrao"
+    android:background="@color/background_login"
     android:orientation="vertical"
     tools:context="com.example.lucas_vieira.knowqui.view.MenuFragment">
 
-    <TextView
-        android:id="@+id/textoIniciarId"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/login_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="Iniciar Jogo"
-        android:layout_gravity="end"
-        android:textColor="@android:color/background_light"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        />
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textoIniciarId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/iniciar_jogo"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
 
 
 </LinearLayout>
