@@ -40,7 +40,8 @@ import custom.RequestAndResponseUrlConst;
 import model.DAO.UsuarioDAO;
 import model.Usuario;
 import utils.CarregamentoDialog;
-import utils.GetStringJson;
+import utils.GetterStringJson;
+
 
 public class LoginFragment extends Fragment {
 
@@ -137,7 +138,7 @@ public class LoginFragment extends Fragment {
 
                     InputStream inputStream = response.getEntity().getContent();
 
-                    String json = GetStringJson.getStringFromInputStream(inputStream);
+                    String json = GetterStringJson.getStringFromInputStream(inputStream);
                     inputStream.close();
 
                     return json;

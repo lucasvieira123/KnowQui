@@ -14,6 +14,7 @@ public abstract class WaitStopLogicOnTextView {
     private Activity activity;
     private int tempoEmMinutos;
     private TextView cronometro;
+    private Timer timer;
 
     public WaitStopLogicOnTextView(Activity activity, TextView cronometro, int tempoEmMinutos) {
         this.cronometro = cronometro;
@@ -24,7 +25,7 @@ public abstract class WaitStopLogicOnTextView {
     public WaitStopLogicOnTextView start(){
         final Integer[] tempoEmSegundos = {tempoEmMinutos * 60};
 
-        Timer timer = new Timer();
+         timer = new Timer();
         try {
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -62,5 +63,9 @@ public abstract class WaitStopLogicOnTextView {
 
 
         return minuto + ":" + segundos;
+    }
+
+    public void stop(){
+        timer.cancel();
     }
 }

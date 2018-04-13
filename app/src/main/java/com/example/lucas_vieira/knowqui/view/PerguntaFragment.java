@@ -59,6 +59,7 @@ public class PerguntaFragment extends Fragment {
     private TextView ultimoItemSelecionado;
     private LetraDoItem letraSelecionada;
     private LetraDoItem letraDoItemCorreto;
+    private WaitStopLogicOnTextView waitStopLogicOnTextView;
 
 
     @Override
@@ -198,7 +199,7 @@ public class PerguntaFragment extends Fragment {
 
         int tempoEmMinutos = perguntaAtual.getTempo();
 
-        new WaitStopLogicOnTextView(getActivity(),cronometro,tempoEmMinutos) {
+       waitStopLogicOnTextView =  new WaitStopLogicOnTextView(getActivity(),cronometro,tempoEmMinutos) {
             @Override
             protected void aoEsgotarTempo() {
                 enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela();
@@ -403,6 +404,9 @@ public class PerguntaFragment extends Fragment {
 
 
     private void chamarTelaAgradecimento() {
+
+        waitStopLogicOnTextView.stop();
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AgradecimentoFragment agradecimentoFragment = new AgradecimentoFragment();
@@ -412,9 +416,13 @@ public class PerguntaFragment extends Fragment {
                 agradecimentoFragment.getClass().getSimpleName());
 
         fragmentTransaction.commit();
+
     }
 
     private void carregarNovaPerguntaEAtualizarTela() {
+
+        waitStopLogicOnTextView.stop();
+
         getActivity().getFragmentManager()
                 .beginTransaction()
                 .detach(thisFragment)
