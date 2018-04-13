@@ -39,7 +39,7 @@ import java.io.InputStream;
 import java.util.regex.Pattern;
 
 import utils.CarregamentoDialog;
-import utils.GetStringJson;
+import utils.GetterStringJson;
 
 public class CadastroFragment extends Fragment {
 
@@ -166,7 +166,7 @@ public class CadastroFragment extends Fragment {
                             InputStream inputStream = null;
                             try {
                                 inputStream = response.getEntity().getContent();
-                                String json = GetStringJson.getStringFromInputStream(inputStream);
+                                String json = GetterStringJson.getStringFromInputStream(inputStream);
                                 inputStream.close();
 
                                 if (verificaEExibeMensagemError(json)){
