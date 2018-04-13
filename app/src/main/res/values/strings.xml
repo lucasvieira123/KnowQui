@@ -23,5 +23,7 @@
     <string name="sexo_feminino">Feminino</string>
     <string name="acesso">Acessar</string>
     <string name="cadastro">Cadastrar</string>
+    <string name="iniciar_jogo">Iniciar Jogo</string>
 
 </resources>
+
