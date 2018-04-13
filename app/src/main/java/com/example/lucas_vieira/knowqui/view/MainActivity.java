@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private static void startUpMethod(Context context) {
         //depois devo criar uma classe so para gerenciar isso
         // acredito que seja uma classe do tipo MyApplication extends Application
+        //Joao: Exatamente
 
         UsuarioDAO usuarioDAO = UsuarioDAO.getInstance(context);
 
@@ -69,14 +69,12 @@ public class MainActivity extends AppCompatActivity {
         respostaDAO.removeAll();
 
 
-
-
     }
 
     @Override
     public void onBackPressed() {
         Fragment perguntaFragment = getFragmentManager().findFragmentByTag("PerguntaFragment");
-        if (perguntaFragment != null){
+        if (perguntaFragment != null) {
             if (perguntaFragment.isVisible())
                 return;
         }
