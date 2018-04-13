@@ -172,6 +172,8 @@ public class CadastroFragment extends Fragment {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                        }else{
+                            Toast.makeText(getActivity(),"Ocorreu um erro ao cadastrar, favor tentar novamente!", Toast.LENGTH_LONG).show();
                         }
                     }
                 }.execute();
