@@ -1,26 +1,20 @@
 package com.example.lucas_vieira.knowqui.view;
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.example.lucas_vieira.knowqui.R;
-
 
 
 public class MenuFragment extends Fragment {
     private TextView iniciarJogo;
-
-
 
     @Nullable
     @Override
@@ -46,12 +40,9 @@ public class MenuFragment extends Fragment {
     }
 
     private void onClickIniciarJogo() {
-      chamarTelaDePergunta();
+        chamarTelaDePergunta();
 
     }
-
-
-
 
     private void chamarTelaDePergunta() {
 
@@ -67,9 +58,4 @@ public class MenuFragment extends Fragment {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 }
