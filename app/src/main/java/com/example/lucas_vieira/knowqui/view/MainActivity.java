@@ -89,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        Fragment loginFragment = getFragmentManager().findFragmentByTag("LoginFragment");
+        if(loginFragment.isVisible()){
+            super.onBackPressed();
+        }
+
     }
 
     private void chamarTelaLogin() {
