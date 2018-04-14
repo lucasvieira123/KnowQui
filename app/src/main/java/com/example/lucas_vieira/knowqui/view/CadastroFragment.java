@@ -38,8 +38,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
+import custom.RequestAndResponseUrlConst;
+import utils.AsynctaskWithProgress;
 import utils.CarregamentoDialog;
 import utils.GetterStringJson;
+import utils.RequestAndResponseHelper;
 
 public class CadastroFragment extends Fragment {
 
@@ -92,225 +95,282 @@ public class CadastroFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (!validarConfirmacaoSenha()){
+                if (!validarConfirmacaoSenha()) {
                     return;
                 }
 
-                if (validarPreenchimentoCampos()){
+                if (validarPreenchimentoCampos()) {
                     return;
                 }
 
-                if (validarTamanhoMinimoLoginESenha()){
+                if (validarTamanhoMinimoLoginESenha()) {
                     return;
                 }
 
-                if(validarAcentuacaoEmNomeLoginESenha()){
+                if (validarAcentuacaoEmNomeLoginESenha()) {
                     return;
                 }
 
 
-                final CarregamentoDialog dialog = new CarregamentoDialog(getActivity());
-                dialog.show();
+                final RequestAndResponseHelper respostaReqAndRespHelper = new RequestAndResponseHelper();
 
-                new AsyncTask<Void, Void, HttpResponse>() {
-                    HttpClient client = new DefaultHttpClient();
-                    HttpResponse response;
-                    JSONObject cadastroUsuario = new JSONObject();
-
+                new AsynctaskWithProgress<String, Void, String>(getActivity()) {
                     @Override
-                    protected HttpResponse doInBackground(Void... voids) {
-                        HttpPost post = new HttpPost("http://knowqui.com.br/cadastrar-usuario");
-
-                        try {
-                            cadastroUsuario.put("nome", editTextNome.getText().toString());
-                            cadastroUsuario.put("login", editTextLogin.getText().toString().toLowerCase().trim());
-                            cadastroUsuario.put("senha", editTextSenha.getText().toString().toLowerCase().trim());
-
-                            if (ensinoPublico.isChecked()) {
-                                cadastroUsuario.put("rede_ensino", 0);
-                            } else if (ensinoPrivado.isChecked()) {
-                                cadastroUsuario.put("rede_ensino", 1);
-                            }
-
-                            if (sexoMasculino.isChecked()) {
-                                cadastroUsuario.put("sexo", "M");
-                            } else if (sexoFeminino.isChecked()) {
-                                cadastroUsuario.put("sexo", "F");
-                            }
-
-                            StringEntity entity = new StringEntity(cadastroUsuario.toString());
-                            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                            post.setEntity(entity);
-                            response = client.execute(post);
-                            Log.i("CADASTRO", "doInBackground: response --->" + response.toString());
-                            return response;
-                        } catch (JSONException | IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
+                    public String doInBackgroundCustom(String[] uri) throws Exception {
+                        String jsonRequestResposta = construirJsonCadastrar();
+                        String jsonResponseResposta = respostaReqAndRespHelper
+                                .setUri(uri[0])
+                                .setJsonRequestString(jsonRequestResposta)
+                                .getJson();
+                        return jsonResponseResposta;
 
                     }
 
                     @Override
-                    protected void onPostExecute(HttpResponse httpResponse) {
-                        dialog.dismiss();
-
-                        if (response != null){
-                            InputStream inputStream = null;
-                            try {
-                                inputStream = response.getEntity().getContent();
-                                String json = GetterStringJson.getStringFromInputStream(inputStream);
-                                inputStream.close();
-
-                                if (verificaEExibeMensagemError(json)){
-                                    return;
-                                }
-                                Toast.makeText(getActivity(),"Cadastrado com sucesso!",Toast.LENGTH_SHORT).show();
-
-                                chamaLoginFragment();
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }else{
-                            Toast.makeText(getActivity(),"Ocorreu um erro ao cadastrar, favor tentar novamente!", Toast.LENGTH_LONG).show();
+                    public void onPostExecuteCustom(String json) {
+                        if (verificaEExibeMensagemError(json)) {
+                            return;
                         }
+
+                        Toast.makeText(getActivity(), "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                        chamaLoginFragment();
                     }
-                }.execute();
+
+                    @Override
+                    public void onExceptionInBackGround(Exception e) {
+                        Toast.makeText(getActivity(), "Ocorreu um erro ao cadastrar, favor tentar novamente!", Toast.LENGTH_LONG).show();
+                    }
+                }.execute(RequestAndResponseUrlConst.CADASTRAR);
+
+
+//                final CarregamentoDialog dialog = new CarregamentoDialog(getActivity());
+//                dialog.show();
+//
+//                new AsyncTask<Void, Void, HttpResponse>() {
+//                    HttpClient client = new DefaultHttpClient();
+//                    HttpResponse response;
+//                    JSONObject cadastroUsuario = new JSONObject();
+//
+//                    @Override
+//                    protected HttpResponse doInBackground(Void... voids) {
+//                        HttpPost post = new HttpPost("http://knowqui.com.br/cadastrar-usuario");
+//
+//                        try {
+//                            cadastroUsuario.put("nome", editTextNome.getText().toString());
+//                            cadastroUsuario.put("login", editTextLogin.getText().toString().toLowerCase().trim());
+//                            cadastroUsuario.put("senha", editTextSenha.getText().toString().toLowerCase().trim());
+//
+//                            if (ensinoPublico.isChecked()) {
+//                                cadastroUsuario.put("rede_ensino", 0);
+//                            } else if (ensinoPrivado.isChecked()) {
+//                                cadastroUsuario.put("rede_ensino", 1);
+//                            }
+//
+//                            if (sexoMasculino.isChecked()) {
+//                                cadastroUsuario.put("sexo", "M");
+//                            } else if (sexoFeminino.isChecked()) {
+//                                cadastroUsuario.put("sexo", "F");
+//                            }
+//
+//                            StringEntity entity = new StringEntity(cadastroUsuario.toString());
+//                            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+//                            post.setEntity(entity);
+//                            response = client.execute(post);
+//                            Log.i("CADASTRO", "doInBackground: response --->" + response.toString());
+//                            return response;
+//                        } catch (JSONException | IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        return null;
+//
+//                    }
+//
+//                    @Override
+//                    protected void onPostExecute(HttpResponse httpResponse) {
+//                        dialog.dismiss();
+//
+//                        if (response != null){
+//                            InputStream inputStream = null;
+//                            try {
+//                                inputStream = response.getEntity().getContent();
+//                                String json = GetterStringJson.getStringFromInputStream(inputStream);
+//                                inputStream.close();
+//
+//                                if (verificaEExibeMensagemError(json)){
+//                                    return;
+//                                }
+//                                Toast.makeText(getActivity(),"Cadastrado com sucesso!",Toast.LENGTH_SHORT).show();
+//
+//                                chamaLoginFragment();
+//
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }else{
+//                            Toast.makeText(getActivity(),"Ocorreu um erro ao cadastrar, favor tentar novamente!", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                }.execute();
             }
         };
-    }
-
-    private boolean validarAcentuacaoEmNomeLoginESenha() {
-        String nome = editTextNome.getText().toString();
-        String login = editTextLogin.getText().toString();
-        String senha = editTextSenha.getText().toString();
-
-        boolean nomeContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", nome);
-        boolean loginContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", login);
-        boolean senhaContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", senha);
-
-        if(loginContemAcento || senhaContemAcento || nomeContemAcento){
-            Toast.makeText(getActivity(),"Os campos Nome, Login ou Senha não devem ter acentuação!",Toast.LENGTH_LONG).show();
-        }
-
-        return loginContemAcento || senhaContemAcento || nomeContemAcento;
-
-
-
-    }
-
-    @SuppressLint("ResourceType")
-    private boolean validarConfirmacaoSenha(){
-        String senha = editTextSenha.getText().toString();
-        String confirmarSenha = editTextConfirmarSenha.getText().toString();
-
-        if (senha.equals(confirmarSenha)){
-            inputConfirmarSenha.setErrorEnabled(false);
-            return true;
-        }else{
-            inputConfirmarSenha.setErrorEnabled(true);
-            inputConfirmarSenha.setError("As senhas não conferem!");
-            inputConfirmarSenha.setErrorTextAppearance(R.color.errorMessage);
-            return false;
-        }
-    }
-
-    private boolean validarTamanhoMinimoLoginESenha(){
-        if(editTextLogin.getText().toString().length() < 4){
-            inputLogin.setErrorEnabled(true);
-            inputLogin.setError("A Login deve conter no mínino 4 caracteres!");
-            return true;
-        }
-
-        if (editTextSenha.getText().toString().length() < 4 ){
-            inputSenha.setErrorEnabled(true);
-            inputSenha.setError("A Senha deve conter no mínino 4 caracteres!");
-
-            return true;
-        }
-
-        return false;
-
-    }
-
-    private boolean validarPreenchimentoCampos(){
-        String nome = editTextNome.getText().toString();
-        String login = editTextLogin.getText().toString();
-        String senha = editTextSenha.getText().toString();
-        String confirmarSenha = editTextConfirmarSenha.getText().toString();
-
-        if (nome.isEmpty() || login.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
-            if (nome.isEmpty()) {
-                inputNome.setErrorEnabled(true);
-                inputNome.setError("Campo Obrigatório!");
             }
 
-            if (login.isEmpty()) {
-                inputLogin.setErrorEnabled(true);
-                inputLogin.setError("Campo Obrigatório!");
-            }
+            private String construirJsonCadastrar() {
+                JSONObject cadastroUsuario = new JSONObject();
 
-            if (senha.isEmpty()) {
-                inputSenha.setErrorEnabled(true);
-                inputSenha.setError("Campo Obrigatório!");
-            }
+                try {
+                    cadastroUsuario.put("nome", editTextNome.getText().toString());
+                    cadastroUsuario.put("login", editTextLogin.getText().toString().toLowerCase().trim());
+                    cadastroUsuario.put("senha", editTextSenha.getText().toString().toLowerCase().trim());
 
-            if (confirmarSenha.isEmpty()) {
-                inputConfirmarSenha.setErrorEnabled(true);
-                inputConfirmarSenha.setError("Campo Obrigatório!");
-            }
+                    if (ensinoPublico.isChecked()) {
+                        cadastroUsuario.put("rede_ensino", 0);
+                    } else if (ensinoPrivado.isChecked()) {
+                        cadastroUsuario.put("rede_ensino", 1);
+                    }
 
-            return true;
-        }else {
-            return false;
-        }
-    }
+                    if (sexoMasculino.isChecked()) {
+                        cadastroUsuario.put("sexo", "M");
+                    } else if (sexoFeminino.isChecked()) {
+                        cadastroUsuario.put("sexo", "F");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-    View.OnFocusChangeListener desabilitarErroInputText = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View view, boolean b) {
-            if (view.hasFocus()){
-                inputNome.setErrorEnabled(false);
-                inputLogin.setErrorEnabled(false);
-                inputSenha.setErrorEnabled(false);
-                inputConfirmarSenha.setErrorEnabled(false);
-            }
-        }
-    };
+                return cadastroUsuario.toString();
 
-
-
-    private boolean verificaEExibeMensagemError(String json){
-        try {
-            JSONArray jsonArray = new JSONArray(json);
-            JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
-
-            if(jsonObject.toString().contains("message")){
-                String messagem = jsonObject.getString("message");
-                Toast.makeText(getActivity(), messagem, Toast.LENGTH_SHORT).show();
             }
 
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            private boolean validarAcentuacaoEmNomeLoginESenha() {
+                String nome = editTextNome.getText().toString();
+                String login = editTextLogin.getText().toString();
+                String senha = editTextSenha.getText().toString();
+
+                boolean nomeContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", nome);
+                boolean loginContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", login);
+                boolean senhaContemAcento = Pattern.matches(".*[áàãâéèẽêíìĩîóòõôúùũûÁÀÃÂÉÈẼÊÍÌĨÎÒÓÔÕÙÚŨÛ].*", senha);
+
+                if (loginContemAcento || senhaContemAcento || nomeContemAcento) {
+                    Toast.makeText(getActivity(), "Os campos Nome, Login ou Senha não devem ter acentuação!", Toast.LENGTH_LONG).show();
+                }
+
+                return loginContemAcento || senhaContemAcento || nomeContemAcento;
+
+
+            }
+
+            @SuppressLint("ResourceType")
+            private boolean validarConfirmacaoSenha() {
+                String senha = editTextSenha.getText().toString();
+                String confirmarSenha = editTextConfirmarSenha.getText().toString();
+
+                if (senha.equals(confirmarSenha)) {
+                    inputConfirmarSenha.setErrorEnabled(false);
+                    return true;
+                } else {
+                    inputConfirmarSenha.setErrorEnabled(true);
+                    inputConfirmarSenha.setError("As senhas não conferem!");
+                    inputConfirmarSenha.setErrorTextAppearance(R.color.errorMessage);
+                    return false;
+                }
+            }
+
+            private boolean validarTamanhoMinimoLoginESenha() {
+                if (editTextLogin.getText().toString().length() < 4) {
+                    inputLogin.setErrorEnabled(true);
+                    inputLogin.setError("A Login deve conter no mínino 4 caracteres!");
+                    return true;
+                }
+
+                if (editTextSenha.getText().toString().length() < 4) {
+                    inputSenha.setErrorEnabled(true);
+                    inputSenha.setError("A Senha deve conter no mínino 4 caracteres!");
+
+                    return true;
+                }
+
+                return false;
+
+            }
+
+            private boolean validarPreenchimentoCampos() {
+                String nome = editTextNome.getText().toString();
+                String login = editTextLogin.getText().toString();
+                String senha = editTextSenha.getText().toString();
+                String confirmarSenha = editTextConfirmarSenha.getText().toString();
+
+                if (nome.isEmpty() || login.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
+                    if (nome.isEmpty()) {
+                        inputNome.setErrorEnabled(true);
+                        inputNome.setError("Campo Obrigatório!");
+                    }
+
+                    if (login.isEmpty()) {
+                        inputLogin.setErrorEnabled(true);
+                        inputLogin.setError("Campo Obrigatório!");
+                    }
+
+                    if (senha.isEmpty()) {
+                        inputSenha.setErrorEnabled(true);
+                        inputSenha.setError("Campo Obrigatório!");
+                    }
+
+                    if (confirmarSenha.isEmpty()) {
+                        inputConfirmarSenha.setErrorEnabled(true);
+                        inputConfirmarSenha.setError("Campo Obrigatório!");
+                    }
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            View.OnFocusChangeListener desabilitarErroInputText = new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (view.hasFocus()) {
+                        inputNome.setErrorEnabled(false);
+                        inputLogin.setErrorEnabled(false);
+                        inputSenha.setErrorEnabled(false);
+                        inputConfirmarSenha.setErrorEnabled(false);
+                    }
+                }
+            };
+
+
+            private boolean verificaEExibeMensagemError(String json) {
+                try {
+                    JSONArray jsonArray = new JSONArray(json);
+                    JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
+
+                    if (jsonObject.toString().contains("message")) {
+                        String messagem = jsonObject.getString("message");
+                        Toast.makeText(getActivity(), messagem, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return json.contains("error");
+            }
+
+            private void chamaLoginFragment() {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                LoginFragment loginFragment = new LoginFragment();
+
+                fragmentTransaction.replace(R.id.layout_main,
+                        loginFragment,
+                        loginFragment.getClass().getSimpleName());
+
+                fragmentTransaction.commitAllowingStateLoss();
+
+
+            }
+
         }
-        return json.contains("error");
-    }
-
-    private void chamaLoginFragment() {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        LoginFragment loginFragment = new LoginFragment();
-
-        fragmentTransaction.replace(R.id.layout_main,
-                loginFragment,
-                loginFragment.getClass().getSimpleName());
-
-        fragmentTransaction.commitAllowingStateLoss();
-
-
-    }
-
-}

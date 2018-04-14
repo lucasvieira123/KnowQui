@@ -36,6 +36,9 @@ public abstract class WaitStopLogicOnTextView {
                             if (tempoEmSegundos[0] == 0) {
                                 aoEsgotarTempo();
                                 cancel();
+                                stop();
+
+
                             }
 
                             cronometro.setText(String.valueOf(stringTempoFormatado(tempoEmSegundos[0])));
@@ -67,5 +70,6 @@ public abstract class WaitStopLogicOnTextView {
 
     public void stop(){
         timer.cancel();
+        timer.purge();
     }
 }

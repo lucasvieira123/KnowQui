@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-//import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,31 +16,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.lucas_vieira.knowqui.R;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import custom.RequestAndResponseUrlConst;
 import model.DAO.UsuarioDAO;
 import model.Usuario;
+import utils.AsynctaskWithProgress;
 import utils.CarregamentoDialog;
 import utils.GetterStringJson;
+import utils.RequestAndResponseHelper;
 
 
 public class LoginFragment extends Fragment {
@@ -81,8 +80,6 @@ public class LoginFragment extends Fragment {
 
         senha = senhaEdtTxt.getText().toString();
 
-        loginEdtTxt.setText("valeria");
-        senhaEdtTxt.setText("valeria");
     }
 
     private View.OnClickListener onClickListener() {
@@ -116,18 +113,61 @@ public class LoginFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
     private void logar() {
-        final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
+        final RequestAndResponseHelper respostaReqAndRespHelper = new RequestAndResponseHelper();
+
+        new AsynctaskWithProgress<String, Void, String>(getActivity()) {
+            @Override
+            public String doInBackgroundCustom(String[] uri) throws Exception {
+                String jsonRequestResposta = construirJsonLogar();
+                String jsonResponseResposta = respostaReqAndRespHelper
+                        .setUri(uri[0])
+                        .setJsonRequestString(jsonRequestResposta)
+                        .getJson();
+                return jsonResponseResposta;
+            }
+
+            @Override
+            public void onPostExecuteCustom(String jsonResponse) {
+                if (verificaSeExisteStringDeErro(jsonResponse)) {
+                    Toast.makeText(getActivity(), "Ocorreu um erro: " + pegarMensagemErro(jsonResponse), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                inserirUsuarioBDViaJson(jsonResponse);
+
+                UsuarioDAO usuarioDAO = UsuarioDAO.getInstance(getActivity().getBaseContext());
+                Usuario usuarioLogado = usuarioDAO.getFirst();
+
+                Toast.makeText(getActivity(), "Bem vindo, "+usuarioLogado.getNome()+"!", Toast.LENGTH_SHORT).show();
+                chamarTelaMenu();
+            }
+
+            @Override
+            public void onExceptionInBackGround(Exception e) {
+                Toast.makeText(getActivity(), "Ocorreu um erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }.execute(RequestAndResponseUrlConst.LOGAR);
+
+      /*  final CarregamentoDialog carregamentoDialog = new CarregamentoDialog(getActivity());
         carregamentoDialog.show();
 
         new AsyncTask<Void, Void, String>() {
 
-            HttpClient cliente = new DefaultHttpClient();
+            //HttpClient cliente = new DefaultHttpClient();
             HttpResponse response;
             JSONObject login = new JSONObject();
 
 
             @Override
             protected String doInBackground(Void... voids) {
+                HttpParams params = new BasicHttpParams();
+                params.setParameter("http.connection.timeout", 10000);
+                params.setParameter("http.socket.timeout", 10000);
+                params.setParameter("http.protocol.version", HttpVersion.HTTP_1_1);
+                params.setParameter("http.useragent", "Apache-HttpClient/Android");
+
+                HttpClient cliente = new DefaultHttpClient(params);
+
 
                 HttpPost post = new HttpPost(RequestAndResponseUrlConst.LOGAR);
                 try {
@@ -146,8 +186,17 @@ public class LoginFragment extends Fragment {
 
                     return json;
 
-                } catch (JSONException | IOException e) {
-                    e.printStackTrace();
+                } catch (final Exception e) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+
                 }
 
                 return null;
@@ -174,7 +223,19 @@ public class LoginFragment extends Fragment {
                 }
             }
 
-        }.execute();
+        }.execute();*/
+    }
+
+    private String construirJsonLogar() {
+        JSONObject login = new JSONObject();
+        try {
+            login.put("login", loginEdtTxt.getText().toString());
+            login.put("senha", senhaEdtTxt.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+       return login.toString();
     }
 
     private void chamarTelaMenu() {

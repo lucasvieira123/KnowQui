@@ -114,18 +114,30 @@ public class PerguntaFragment extends Fragment {
         new AsynctaskWithProgress<String, Void, String>(getActivity()) {
             @Override
             public String doInBackgroundCustom(String[] uri) throws Exception {
-                String jsonComPerguntaESuasRespostas = perguntaComSuasRespostasReqAndRespHelper.setUri(uri[0]).setJsonRequestString(jsonPergunta).getJson();
+
+                String jsonComPerguntaESuasRespostas = perguntaComSuasRespostasReqAndRespHelper
+                        .setUri(uri[0])
+                        .setJsonRequestString(jsonPergunta)
+                        .getJson();
+
                 return jsonComPerguntaESuasRespostas;
             }
 
             @Override
-            public void onPostExecuteCustom(String JsonStringPerguntaComSuasRespostas) {
-                if(JsonStringPerguntaComSuasRespostas.contains("error")){
+            public void onPostExecuteCustom(String jsonStringPerguntaComSuasRespostas) {
+                if(jsonStringPerguntaComSuasRespostas == null){
+                    return;
+                }
+
+                if(jsonStringPerguntaComSuasRespostas.contains("error")){
+                    String message = getMessageJson(jsonStringPerguntaComSuasRespostas);
+
+                    Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
                     chamarTelaAgradecimento();
                     return;
                 }
 
-                criarPerguntaComSuasRespostasLimparBDESalvarBD(JsonStringPerguntaComSuasRespostas);
+                criarPerguntaComSuasRespostasLimparBDESalvarBD(jsonStringPerguntaComSuasRespostas);
 
                 perguntaAtual = (PerguntaDAO.getInstance(getActivity())).getFirst();
                 letraDoItemCorreto = getLetraDoItemCorreto();
@@ -134,9 +146,25 @@ public class PerguntaFragment extends Fragment {
             }
 
             public void onExceptionInBackGround(Exception e) {
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Ocorreu um erro: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                chamarTelaMenu();
             }
+
         }.execute(RequestAndResponseUrlConst.LISTA_PERGUNTA);
+    }
+
+
+
+    private String getMessageJson(String jsonStringPerguntaComSuasRespostas) {
+        String message = "";
+        try {
+            JSONArray jsonArray = new JSONArray(jsonStringPerguntaComSuasRespostas);
+            JSONObject object = new JSONObject(jsonArray.getString(0));
+            message = object.getString("message");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
     private LetraDoItem getLetraDoItemCorreto() {
@@ -146,13 +174,10 @@ public class PerguntaFragment extends Fragment {
                 return LetraDoItem.levraA;
             case "B":
                 return LetraDoItem.levraB;
-
             case "C":
                 return LetraDoItem.levraC;
-
             case "D":
                 return LetraDoItem.levraD;
-
         }
         return null;
     }
@@ -353,7 +378,8 @@ public class PerguntaFragment extends Fragment {
 
             @Override
             public void onExceptionInBackGround(Exception e) {
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getActivity(), "Ocorreu um erro: "+e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }.execute(RequestAndResponseUrlConst.RESPONDER);
 
@@ -433,6 +459,24 @@ public class PerguntaFragment extends Fragment {
 
         fragmentTransaction.commitAllowingStateLoss();
 
+    }
+
+    private void chamarTelaMenu() {
+
+        if(waitStopLogicOnTextView != null){
+            waitStopLogicOnTextView.stop();
+        }
+
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MenuFragment menuFragment = new MenuFragment();
+
+        fragmentTransaction.replace(R.id.layout_main,
+                menuFragment,
+                menuFragment.getClass().getSimpleName());
+
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     private void carregarNovaPerguntaEAtualizarTela() {

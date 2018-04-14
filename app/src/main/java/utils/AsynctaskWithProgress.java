@@ -35,7 +35,9 @@ public abstract class AsynctaskWithProgress<Params, Progress, Result> extends As
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    carregamentoDialog.dismiss();
                     onExceptionInBackGround(e);
+                    cancel(true);
                 }
             });
 

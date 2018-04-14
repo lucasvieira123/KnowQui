@@ -3,11 +3,14 @@ package utils;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
@@ -25,7 +28,14 @@ public class RequestAndResponseHelper {
 
 
     public String getJson() throws Exception {
-        HttpClient httpClient = new DefaultHttpClient();
+
+        HttpParams params = new BasicHttpParams();
+        params.setParameter("http.connection.timeout", 10000);
+        params.setParameter("http.socket.timeout", 10000);
+        params.setParameter("http.protocol.version", HttpVersion.HTTP_1_1);
+        params.setParameter("http.useragent", "Apache-HttpClient/Android");
+
+        HttpClient httpClient = new DefaultHttpClient(params);
         HttpResponse httpResponse = null;
         HttpPost post = new HttpPost(uri);
 
