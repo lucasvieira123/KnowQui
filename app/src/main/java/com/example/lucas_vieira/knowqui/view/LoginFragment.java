@@ -82,8 +82,6 @@ public class LoginFragment extends Fragment {
 
         senha = senhaEdtTxt.getText().toString();
 
-        loginEdtTxt.setText("lucas");
-        senhaEdtTxt.setText("lucas");
 
     }
 
