@@ -73,11 +73,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment perguntaFragment = getFragmentManager().findFragmentByTag("PerguntaFragment");
-        if (perguntaFragment != null) {
-            if (perguntaFragment.isVisible())
-                return;
+
+        Fragment cadastroFragment = getFragmentManager().findFragmentByTag("CadastroFragment");
+
+        if(cadastroFragment!= null &&cadastroFragment.isVisible()){
+            chamarTelaLogin();
+            return;
         }
-        super.onBackPressed();
+
+        Fragment menuFragment =  getFragmentManager().findFragmentByTag("MenuFragment");
+
+        if(menuFragment!= null && menuFragment.isVisible()){
+            (UsuarioDAO.getInstance(this)).removeAll();
+            chamarTelaLogin();
+            return;
+        }
+
+    }
+
+    private void chamarTelaLogin() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        LoginFragment loginFragment = new LoginFragment();
+
+        fragmentTransaction.replace(R.id.layout_main,
+                loginFragment,
+                loginFragment.getClass().getSimpleName());
+
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }

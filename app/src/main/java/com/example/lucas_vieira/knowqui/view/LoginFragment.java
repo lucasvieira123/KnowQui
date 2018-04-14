@@ -34,6 +34,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
+
 import custom.RequestAndResponseUrlConst;
 import model.DAO.UsuarioDAO;
 import model.Usuario;
@@ -79,6 +81,9 @@ public class LoginFragment extends Fragment {
         login = loginEdtTxt.getText().toString();
 
         senha = senhaEdtTxt.getText().toString();
+
+        loginEdtTxt.setText("lucas");
+        senhaEdtTxt.setText("lucas");
 
     }
 
@@ -144,7 +149,12 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onExceptionInBackGround(Exception e) {
-                Toast.makeText(getActivity(), "Ocorreu um erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                String msgErro = e.getMessage();
+                if(e instanceof SocketTimeoutException){
+                    msgErro = "SocketTimeoutException";
+                }
+
+                Toast.makeText(getActivity(), "Ocorreu um erro: " + msgErro, Toast.LENGTH_LONG).show();
             }
         }.execute(RequestAndResponseUrlConst.LOGAR);
 

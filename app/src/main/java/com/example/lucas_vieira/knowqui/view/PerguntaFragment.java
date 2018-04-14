@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -378,8 +379,12 @@ public class PerguntaFragment extends Fragment {
 
             @Override
             public void onExceptionInBackGround(Exception e) {
+                String msgErro = e.getMessage();
+                if(e instanceof SocketTimeoutException){
+                    msgErro = "SocketTimeoutException";
+                }
 
-                Toast.makeText(getActivity(), "Ocorreu um erro: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Ocorreu um erro: " + msgErro, Toast.LENGTH_LONG).show();
             }
         }.execute(RequestAndResponseUrlConst.RESPONDER);
 
