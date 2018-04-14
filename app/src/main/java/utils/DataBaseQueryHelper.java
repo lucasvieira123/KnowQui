@@ -49,7 +49,7 @@ public class DataBaseQueryHelper {
         Field[] allAttributesPrivatesAndPublics = classe.getDeclaredFields();
         int countPrivateAttributes = allAttributesPrivatesAndPublics.length - COUNT_DEFAULT_FIELDS_PUBLIC;
         Field[] privateAttributes = new Field[countPrivateAttributes];
-        for (int i = 0; i < allAttributesPrivatesAndPublics.length; i++) {
+        for (int i = 0; i < countPrivateAttributes; i++) {
             if (isPrivate(allAttributesPrivatesAndPublics[i]) && notStartWithUnderscore(allAttributesPrivatesAndPublics[i])) {
                 privateAttributes[i] = allAttributesPrivatesAndPublics[i];
             }

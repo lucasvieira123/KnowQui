@@ -74,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+        Fragment agradecimentoFragment = getFragmentManager().findFragmentByTag("AgradecimentoFragment");
+        if(agradecimentoFragment != null && agradecimentoFragment.isVisible()){
+            super.onBackPressed();
+        }
+
         Fragment cadastroFragment = getFragmentManager().findFragmentByTag("CadastroFragment");
 
         if (cadastroFragment != null && cadastroFragment.isVisible()) {
@@ -93,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         if (perguntaFragment != null && perguntaFragment.isVisible()) {
             return;
         }
+
+
 
         super.onBackPressed();
 
