@@ -45,9 +45,30 @@ public class DataBaseQueryHelper {
         return fieldAndTypes;
     }
 
+//    public Field[] getPrivateAttributes() {
+//        Field[] allAttributesPrivatesAndPublics = classe.getDeclaredFields();
+//        int countPrivateAttributes = allAttributesPrivatesAndPublics.length - COUNT_DEFAULT_FIELDS_PUBLIC;
+//        Field[] privateAttributes = new Field[countPrivateAttributes];
+//        for (int i = 0; i < countPrivateAttributes; i++) {
+//            if (isPrivate(allAttributesPrivatesAndPublics[i]) && notStartWithUnderscore(allAttributesPrivatesAndPublics[i])) {
+//                privateAttributes[i] = allAttributesPrivatesAndPublics[i];
+//            }
+//        }
+//
+//
+//
+//        return privateAttributes;
+//    }
+
+    //essa modificacao foi necessaria para lidar com as variaveis criado pelo runinstace que apenas existe na implementação,
+    // mas no apk não existe.
     public Field[] getPrivateAttributes() {
         Field[] allAttributesPrivatesAndPublics = classe.getDeclaredFields();
-        int countPrivateAttributes = allAttributesPrivatesAndPublics.length - COUNT_DEFAULT_FIELDS_PUBLIC;
+        int countFieldsPublic = 0;
+        for (Field field: allAttributesPrivatesAndPublics ) {
+            if (field.toGenericString().contains("public")) countFieldsPublic++;
+        }
+        int countPrivateAttributes = allAttributesPrivatesAndPublics.length - countFieldsPublic;
         Field[] privateAttributes = new Field[countPrivateAttributes];
         for (int i = 0; i < countPrivateAttributes; i++) {
             if (isPrivate(allAttributesPrivatesAndPublics[i]) && notStartWithUnderscore(allAttributesPrivatesAndPublics[i])) {
