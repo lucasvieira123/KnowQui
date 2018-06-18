@@ -25,14 +25,19 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import custom.LetraDoItem;
 import custom.RequestAndResponseUrlConst;
 import model.DAO.PerguntaDAO;
+import model.DAO.RelatorioDAO;
 import model.DAO.RespostaDAO;
 import model.DAO.UsuarioDAO;
 import model.Pergunta;
+import model.Relatorio;
 import model.Resposta;
 import model.Usuario;
 import utils.AsynctaskWithProgress;
@@ -61,6 +66,7 @@ public class PerguntaFragment extends Fragment {
     private LetraDoItem letraSelecionada;
     private LetraDoItem letraDoItemCorreto;
     private WaitStopLogicOnTextView waitStopLogicOnTextView;
+
 
 
     @Override
@@ -339,7 +345,7 @@ public class PerguntaFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     private void enviarRespostaRequisitarUmaNovaPerguntaLimparESalvarBDEPreencherTela(boolean foiPuladaAPergunta) {
         final Integer itemEstaCorretoInt;
-        final Boolean itemEstaCorretoBoolean;
+        Boolean itemEstaCorretoBoolean = false;
         final RequestAndResponseHelper respostaReqAndRespHelper = new RequestAndResponseHelper();
 
         if(foiPuladaAPergunta){
@@ -350,6 +356,19 @@ public class PerguntaFragment extends Fragment {
             itemEstaCorretoInt = itemEstaCorretoBoolean ? 1:0;
 
         }
+
+            RelatorioDAO relatorioDAO = RelatorioDAO.getInstance(getActivity());
+            Random random = new Random();
+            Relatorio relatorio = new Relatorio();
+            relatorio.setTipo(perguntaAtual.getTipo());
+            relatorio.setAcertou(itemEstaCorretoBoolean);
+            relatorio.setId(random.nextInt());
+            try {
+                relatorioDAO.add(relatorio);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
 
 
@@ -453,14 +472,13 @@ public class PerguntaFragment extends Fragment {
             waitStopLogicOnTextView.stop();
         }
 
-
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AgradecimentoFragment agradecimentoFragment = new AgradecimentoFragment();
+        RelatorioFragment relatorioFragment = new RelatorioFragment();
 
         fragmentTransaction.replace(R.id.pergunta_layout_id,
-                agradecimentoFragment,
-                agradecimentoFragment.getClass().getSimpleName());
+                relatorioFragment,
+                relatorioFragment.getClass().getSimpleName());
 
         fragmentTransaction.commitAllowingStateLoss();
 

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/tela_agradecimentos"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/splash"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="monospace"
+        android:text="Relatório!"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/fisico_quimica_label"
+            android:text="Fisico-Química:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:id="@+id/quantidade_acertos_fq"
+            android:textSize="20dp"
+            android:text="acertos fq"
+            android:textColor="#009933"
+            android:layout_toRightOf="@id/fisico_quimica_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/quantidade_erros_fq"
+            android:textSize="20dp"
+            android:text="erros fq"
+            android:textColor="#ff0000"
+            android:layout_toRightOf="@id/quantidade_acertos_fq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+        <TextView
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/quimica_geral_label"
+            android:text="Química Geral:"
+            android:paddingTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fisico_quimica_label"/>
+
+
+        <TextView
+            android:paddingTop="35dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:id="@+id/quantidade_acertos_qg"
+            android:textSize="20dp"
+            android:text="acertos qg"
+            android:textColor="#009933"
+            android:layout_toRightOf="@id/fisico_quimica_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:paddingTop="35dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:id="@+id/quantidade_erros_qg"
+            android:textSize="20dp"
+            android:text="erros qg"
+            android:textColor="#ff0000"
+            android:layout_toRightOf="@id/quantidade_acertos_fq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

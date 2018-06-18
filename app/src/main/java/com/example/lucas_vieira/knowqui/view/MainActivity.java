@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        Fragment agradecimentoFragment = getFragmentManager().findFragmentByTag("AgradecimentoFragment");
+        Fragment agradecimentoFragment = getFragmentManager().findFragmentByTag("RelatorioFragment");
         if(agradecimentoFragment != null && agradecimentoFragment.isVisible()){
             super.onBackPressed();
         }
